@@ -14,7 +14,7 @@ from email.policy import default
 from pathlib import Path
 import os
 
-from easy_thumbnails.conf import Settings as thumbnail_settings
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -46,15 +46,13 @@ INSTALLED_APPS = [
     'carts',
     'orders',
     'django_filters',
-    'coupon_management',
-    'coupons',
-    'sweetify'
+        
     
     
     
 ]
 
-SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
