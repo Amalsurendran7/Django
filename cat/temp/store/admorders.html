@@ -1,0 +1,132 @@
+{%extends 'admhome.html'%}
+
+
+
+{%block content%}
+{%load widget_tweaks%}
+
+<table class="table m-4 me-5" id="dev-table">
+    <thead class="thead">
+     <tr> <th>name</th>
+      <th>Address</th>
+      
+      
+      <th>email</th>
+      <th>product</th>
+      <th>price</th>
+      <th>quantity</th>
+      <th>orderno.</th>
+      <th>status</th>
+      <th>Actions</th>
+      
+    </tr>
+
+    </thead>
+    {%for i in data%}
+    <tr>
+      <td>{{i.user.fname}}</td>
+      <td>{{i.order.address_line_2}}</td>
+      <td>{{i.user.email}}</td>
+
+      <td>{{i.product.name}}</td>
+      <td>{{i.product.price}}</td>
+      <td>{{i.quantity}}</td>
+      <td>{{i.order.order_number}}</td>
+      
+      
+      
+      
+      <td>{% if i.returned == "True" %}
+        for return 
+        {%else%}
+        {{i.status}}
+       {%endif%}</td>
+     
+
+    
+       
+      <td><a class="btn btn-primary btn-xs" href="" data-toggle="modal" data-target="#updateModal"><span class="glyphicon glyphicon-edit">update status</span></a>
+        <a class="btn btn-danger btn-xs" href="{% url 'delete_order' i.id  %}"><span class="glyphicon glyphicon-trash">cancel</span></a></td></tr>
+        <h3>   </h3>
+
+        <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateModalLabel">Update order status</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'update_view' i.product.id  i.order.id  i.id%}">
+                        {% csrf_token %}
+                        <div class="container register-form">
+                          <div class="form">
+                            <div class="note">
+                              <p>Update Status Of Order</p>
+                            </div>
+                            <div class="form-content">
+                      
+                                  <label for="">Select status:</label>
+                      
+                                    {% render_field orderForm.status  class="form-control" placeholder="Address" %}
+                                  </div>
+                      
+                                </div>
+                              </div>
+                           <a href="">   <button type="submit" class="btnSubmit btn-primary m-5">Update Order Status</button></a>
+                      
+                      </form>
+                    
+
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="{%url 'alo'%}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    {%endfor%}
+
+
+
+
+  </table>
+
+
+  <nav class="mt-4" aria-label="Page navigation sample">
+	{% if data.has_other_pages %}
+	  <ul class="pagination">
+			{% if data.has_previous %}
+	    <li class="page-item"><a class="page-link" href="?page={{data.previous_page_number}}">Previous</a></li>
+			{% else %}
+			<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+			{% endif %}
+
+			{% for i in data.paginator.page_range %}
+				{% if data.number == i %}
+	    		<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+				{% else %}
+					<li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+				{% endif %}
+	    {% endfor %}
+
+			{% if data.has_next %}
+	    	<li class="page-item"><a class="page-link" href="?page={{data.next_page_number}}">Next</a></li>
+			{% else %}
+				<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+			{% endif %}
+	  </ul>
+	{% endif %}
+</nav>
+
+
+
+
+{%endblock%}

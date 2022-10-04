@@ -1,0 +1,17 @@
+
+import vonage
+client = vonage.Client(key="9fd7e95f", secret="2V2n91tcD3d52kU7")
+verify = vonage.Verify(client)
+response = verify.start_verification(number="918590124080", brand="AcmeInc")
+
+if response["status"] == "0":
+    print("Started verification request_id is %s" % (response["request_id"]))
+else:
+    print("Error: %s" % response["error_text"])
+
+response = verify.start_verification(number="918590124080", brand="AcmeInc")
+
+if response["status"] == "0":
+        print("Started verification request_id is %s" % (response["request_id"]))
+else:
+        print("Error: %s" % response["error_text"])    

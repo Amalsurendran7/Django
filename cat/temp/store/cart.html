@@ -1,0 +1,268 @@
+{%extends 'uhome.html'%}
+
+    
+    
+    
+    
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    
+    
+
+
+ 
+
+{%block t%}
+
+
+<div class="breadcrumb-section breadcrumb-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 text-center">
+                <div class="breadcrumb-text">
+                    <p>Fresh and Organic</p>
+                    <h1>Cart</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end breadcrumb section -->
+
+<!-- cart -->
+
+{%if cart_items%}
+
+<div class="cart-section mt-150 mb-150">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-12">
+                <div class="cart-table-wrap product_data">
+                    <table class="cart-table ">
+                        <thead class="cart-table-head">
+                            <tr class="table-head-row">
+                                <th class="product-remove"></th>
+                                <th class="product-image">Product Image</th>
+                                <th class="product-name">Name</th>
+                                <th class="product-price">Price</th>
+                                <th class="product-quantity">Quantity</th>
+                                <th class="product-total">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           
+
+
+                    
+                            {%for c in cart_items%}
+                            <tr class="table-body-row product_data" >
+                        <td class="product-remove"><a  data-bs-toggle="modal" data-bs-target="#{{c.product.name}}Modal"><i class="far fa-window-close"></i></a></td> 
+                           
+                                <td class="product-image"><img src="{{c.product.img.url}}" alt=""></td>
+                                <td class="product-name">{{c.product.name}}</td>
+                                <td class="product-price">{{c.product.price}}</td>
+                                 <td ><div class="col">
+                                    <div class="input-group input-spinner">
+                                        <div class="input-group-prepend">
+                                          <button class="btn btn-danger " id="decre{{c.id}}"  hx-post="{%url 'minus' c.product.id c.id %}" hx-target="#tests{{c.id}}" hx-trigger="click"><i class="fa fa-minus"></i></button>
+                                        </div>
+                                       <div id="tests{{c.id}}" class="mx-3 border ">
+                                         {{ c.quantity }}
+                                        </div>
+                                    
+                                
+                                        <div class="input-group-append">
+                                            <button  class="btn btn-warning " id="incre{{c.id}}" hx-post="{%url 'plus' c.product.id c.id %}" hx-target="#tests{{c.id}}" hx-trigger="click" >+</button> 
+                            
+                                    </div>
+                                    </div>
+                                    </div> 
+                                    
+                                    
+                                </td>
+                                <td class="product-total"> <input type="text" id="each_total{{c.id}}" value="{{c.sub_total}}"></td></tr>
+                                <script>
+                                    document.body.addEventListener('htmx:configRequest', (event) => {
+                                        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+                                    })
+                                </script>
+                                
+                                
+                            
+                                <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+                            
+                            
+                            
+                            <script>
+                            $(document).ready(function () {
+                            
+                            $('#decre{{c.id}}').click(function (e) { 
+                            e.preventDefault();
+                            console.log('entered')
+                            k=document.getElementById("tests{{c.id}}").innerHTML;
+                            console.log(k);
+                            l=parseInt(k)
+                            console.log(l);
+                          
+                            value={{c.product.price}} * (l-1);
+                           
+
+                            console.log(value);   
+                            $(this).closest('.product_data').find('#each_total{{c.id}}').val(value);
+                            
+                            
+                            
+                            });
+                            
+                            $('#incre{{c.id}}').click(function (e) { 
+                            e.preventDefault();
+                            console.log('entered')
+                            k=document.getElementById("tests{{c.id}}").innerHTML
+                           
+                            l=parseInt(k)
+
+                             sum=0;
+                            value={{c.product.price}} * (l+1) ;
+                            
+
+                            $(this).closest('.product_data').find('#each_total{{c.id}}').val(value);
+                            
+                            
+                            
+                            });
+                            
+                            });
+                            
+                            
+                            </script>    
+                              <div class="modal fade" id="{{c.product.name}}Modal" tabindex="-1" aria-labelledby="{{c.product.name}}ModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="{{c.product.name}}ModalLabel">Delete item</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    
+                                    <div class="modal-body">
+                                      Are you sure you want to delete  this item??
+                                    </div>
+                                    <div class="modal-footer">
+                                                           
+                                    <a href=""><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button></a>
+                                    <a href="{%url 'remove_cart_item' c.product.id c.id %}"><button type="button" class="btn btn-primary">delete</button></a>
+                                     
+                          
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                                   
+                            
+                                
+                            
+                            
+                            {%endfor%}
+                            
+
+                            
+                            
+
+
+                                 <!-- modal -->
+
+
+                                  
+                            </tbody>
+                            </table>
+                            </div>
+                            </div>
+
+                                <div class="col-lg-4">
+                                    <div class="total-section">
+                                        <table class="total-table">
+                                            <thead class="total-table-head">
+                                                <tr class="table-total-row">
+                                                    <th>Total</th>
+                                                    <th>Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="total-data">
+                                                    <td><strong>Tax: </strong></td>
+                                                    <td id="tax">{{tax}}</td>
+                                                </tr>
+                                            
+                                               
+                                                <tr class="total-data">
+                                                    <td><strong> Total: </strong></td>
+                                                    <td id="total_price">{{total}}</td>
+                                                </tr>
+                                                <tr class="total-data">
+                                                    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+                                                    {%if grand_total < total%} 
+                                                    <td><p class="text text-success">Coupon applied</p></td>
+                                                
+                                                    <td><strong>Grand Total: </strong></td>
+                                                    <td id="grand">{{grand_total}}</td>
+                                                    {%else%}
+                                                    
+                                                    <td><strong>Grand Total: </strong></td>
+                                                    <td id="total_price">{{grand_total}}</td>
+                                                    {%endif%}
+                                                </tr>e
+                                                {%for i in messages%}
+                                                {{i}}
+                                                {%endfor%}
+                                            </tbody>
+                                        </table>
+                                       
+                                        <div class="cart-buttons">
+                                    
+                                            <a href="{% url 'checkout' %}" class="boxed-btn black">Check Out</a>
+                                        </div>
+                                    </div>
+                                
+                
+                                    <div class="coupon-section">
+                                        <h3>Apply Coupon</h3>
+                                        <div class="coupon-form-wrap">
+                                            <form action="{%url 'applycoupon' %}" method="post">
+                                                {%csrf_token%}
+                                                <p><input type="text" name="coupon" placeholder="Coupon"></p>
+                                                <p><a href=""><button type="submit"class="btn btn-warning">Apply</button></a></p>
+                                            </form>
+                                            {%for i in messages%}
+                                            {{i}}
+                                            {%endfor%}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        document.body.addEventListener('htmx:configRequest', (event) => {
+                            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}'; //insert csrf token when performing AJAX request 
+                        })
+                        </script>
+
+
+{%else%}
+
+<h2 class="text-center fw-bold m-5">no products in cart</h2>
+
+{%endif%}
+                    
+
+{%block f%}
+
+i
+{%endblock%}
+<script src="https://unpkg.com/htmx.org@1.8.0"></script> 
+
+                     
+ 
+
+
+
+{%endblock%}

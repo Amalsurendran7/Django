@@ -1,0 +1,116 @@
+{%extends 'admhome.html'%}
+
+{%block content%}
+  
+    <div class="card bg-white text-dark ms-5">
+      <div class="card-body">
+
+        <!-- <form action="" method="post">
+          {%csrf_token%}
+          <label for="">search</label>
+          <input type="text" name="search">
+          <button type="submit" class="btn btn-primary">submit</button>
+        </form> -->
+
+        <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" method="post">
+          {%csrf_token%}
+          <div class="input-group">
+              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..."
+                  aria-label="Search" aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit">
+                      <i class="fas fa-search fa-sm"></i>search
+                  </button>
+              </div>
+          </div>
+      </form>
+      
+          
+          
+          
+        
+          
+        
+
+
+
+                 
+          
+
+      </div>
+    </div>
+    <div class="d-sm-flex align-items-center justify-content-center mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Users</h1>
+      <a href="#" class="d-none d-sm-inline-block  shadow-sm"><i
+              class="fas fa-download fa-sm text-white-50"></i> </a>
+  </div>
+
+
+  
+    <table class="table mx-5">
+        <thead class="thead">
+          <tr>
+            <th>firstname</th>
+            <th>username</th>
+        
+            <th>email</th>
+            <th>phone</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        {% for p in h %}
+    {% if p %}
+  
+        <tr>
+          <td> {{p.fname}}</td>
+          
+          <td>{{p.username}}</td>
+          <td>{{p.email}}</td>
+          <td>{{p.phone}}</td>
+          
+          <td><a href="{%url 'block' p.id %}"><button class="btn {%if p.status == 'True'%} btn-danger    {%else%} btn-success {%endif%}rounded-pill w-5" onclick="return confirm('Are you sure?');">{%if p.status == 'True'%}
+            block
+            {%else%}
+            unblock
+            {%endif%}</button></a></td>
+  
+        </tr>
+        {%else%}
+        <br><br><br>
+        <h1>No customers!!</h1>
+        {% endif %}
+        {% endfor %}
+      </table>
+
+      <nav class="mt-4" aria-label="Page navigation sample">
+        {% if h.has_other_pages %}
+          <ul class="pagination">
+            {% if h.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{h.previous_page_number}}">Previous</a></li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+            {% endif %}
+      
+            {% for i in h.paginator.page_range %}
+              {% if h.number == i %}
+                <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+              {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+              {% endif %}
+            {% endfor %}
+      
+            {% if h.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{h.next_page_number}}">Next</a></li>
+            {% else %}
+              <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+            {% endif %}
+          </ul>
+        {% endif %}
+      </nav>
+      
+      
+
+{%endblock content%}
+
+  
+  

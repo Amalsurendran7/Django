@@ -1,0 +1,64 @@
+{%extends 'admhome.html'%}
+
+
+{%block content%}
+{%load widget_tweaks%}
+
+
+<form enctype="multipart/form-data" method="post">
+  {% csrf_token %}
+  <div class="container register-form">
+    <div class="form">
+      <div class="note">
+        <p>Update Product Details</p>
+      </div>
+      <div class="form-content">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Product Name</label>
+              {% render_field productForm.name class="form-control" placeholder="Product Name"  %}
+            </div>
+            <div class="form-group">
+              <label for="">Product Description</label>
+              {% render_field productForm.description class="form-control"  value="{{p.description}}" %}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Product Price</label>
+              {% render_field productForm.price class="form-control" placeholder="Price"  value="{{p.price}}" %}
+            </div>
+            <div class="form-group">
+              {% render_field productForm.img class="form-control" placeholder="product_image"  value="{{p.img}}" %}
+            </div>
+            <div class="form-group">
+              {% render_field productForm.img2 class="form-control" placeholder="product_image" value="{{p.img2}}" %}
+            </div>
+            <div class="form-group">
+              {% render_field productForm.img3 class="form-control" placeholder="product_image" value="{{p.img3}}" %}
+            </div>
+            <div class="form-group">
+              {% render_field productForm.img4 class="form-control" placeholder="product_image" value="{{p.img3}}" %}
+            </div>
+
+
+
+          </div>
+          <div class="form-group">
+            <label for="">Product stock</label>
+            {% render_field productForm.stock class="form-control"  value="{{p.stock}}" %}
+          </div>
+          &nbsp;&nbsp;
+          <div class="form-group">
+            <label for="">Product category</label>
+            {% render_field productForm.cate_id class="form-control"  value="{{p.category}}" %}
+          </div>
+        </div>
+        <button type="submit" class="btnSubmit">Update Product Details</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+{%endblock%}

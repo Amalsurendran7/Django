@@ -1,0 +1,58 @@
+{%extends 'admhome.html'%}
+
+{%block content%}
+<a href="{% url 'cre' %}"><button class="btn btn-primary">create</button></a>
+
+              <table class="table table-hover  my-5" >
+                <thead class="thead">
+                  <tr>
+                    <th> category name</th>
+                    <th>Action</th>
+                    
+                    
+                  </tr>
+                </thead>
+                {%for i in s%}
+
+            {% if i %}
+          
+                <tr>
+                  <td> {{i.category_name}}</td>
+                  
+                  <td>                       <a href="{% url 'delet' i.pk%}"> <button class="btn btn-danger" >delete</button></a>
+                    <a href="{% url 'cupd' i.pk%}"> <button class="btn btn-warning">update</button></a></td>
+          
+                </tr>
+                {%else%}
+                <br><br><br>
+                <h1> NO categories!!</h1>
+                {% endif %}
+                {% endfor %}
+              </table>
+            
+      
+          {% if s.has_other_pages %}
+          <ul class="pagination">
+            {% if s.has_previous %}
+              <li><a href="?page={{ s.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+              <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in s.paginator.page_range %}
+              {% if h.number == i %}
+                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+              {% else %}
+                <li><a href="?page={{ i }}">{{ i }}</a></li>
+              {% endif %}
+            {% endfor %}
+            {% if s.has_next %}
+              <li><a href="?page={{ s.next_page_number }}">&raquo;</a></li>
+            {% else %}
+              <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+          </ul>
+        {% endif %}
+        
+        {%endblock%}
+        
+ 

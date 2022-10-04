@@ -1,0 +1,173 @@
+{%extends 'admhome.html'%}
+
+
+{%block content%}
+{%load widget_tweaks%}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+  <h1 class="h3 mb-0 text-gray-800">Products</h1>
+  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="button" data-toggle="modal" data-target="#productModal"><i
+          class="fas fa-download fa-sm text-white-50"></i> Add product</a>
+          
+
+</div>
+
+
+<table class="table  m-5 w-75">
+    <thead class="thead">
+      <tr>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    {% for p in g %}
+{% if p %}
+
+    <tr>
+      <td> {{p.name}}</td>
+      <td> <img src="{{p.img}}" alt="Profile Pic" height="40px" width="40px" /></td>
+      <td>{{p.price}}</td>
+      <td>{{p.description}}</td>
+      <td>
+
+        <a href="{%url 'update' p.id %}" class="btn btn-primary" type="button" >update</a>
+        <a class="" href="{% url 'dele' p.id  %}"><button class="btn btn-danger w-3 h-2" >delete</button></a></td>
+
+    </tr>
+
+     <!-- update product -->
+  
+ 
+    {%else%}
+    <br><br><br>
+    <h1>No Products!!</h1>
+    {% endif %}
+
+    {% endfor %}
+  </table>
+
+
+
+
+
+
+
+
+       <!-- add product -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="productModalLabel">Add product</h5>
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">*</button>
+        </div>
+       
+       <form method="post" action="addp" enctype="multipart/form-data">
+            {% csrf_token %}
+  <div class="container register-form">
+    <div class="form">
+      <div class="note">
+        <p>ADD PRODUCT</p>
+      </div>
+      <div class="form-content">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              
+              <label for="">Product Name</label>
+              {% render_field productForm.name class="form-control" placeholder="Product Name" %}
+            </div>
+            <div class="form-group">
+              <label for="">Short Description</label>
+              {% render_field productForm.description class="form-control" placeholder="Description" %}
+            </div>
+
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="">Product Price ($)</label>
+              {% render_field productForm.price class="form-control" placeholder="52" %}
+            </div>
+            <div class="form-group">
+              <label for="">Product Image</label>
+              {% render_field productForm.img class="form-control" placeholder="product_image" %}
+              
+            </div>
+            <div class="form-group">
+              
+              {% render_field productForm.img2 class="form-control" placeholder="product_image" %}
+            </div>
+            <div class="form-group">
+            
+              {% render_field productForm.img3 class="form-control" placeholder="product_image" %}
+            </div>
+            <div class="form-group">
+            
+              {% render_field productForm.img4 class="form-control" placeholder="product_image" %}
+            </div>
+
+             <div class="form-group">
+              <label for="">Category</label>
+              {% render_field productForm.cate_id class="form-control" placeholder="category" %}
+             </div>
+             <label for="">Stock</label>
+              {% render_field productForm.stock class="form-control" placeholder="stock" %}
+             </div>
+             
+             
+
+          </div>
+        </div>
+        <button type="submit" class="btnSubmit">ADD</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+
+  <nav class="mt-4" aria-label="Page navigation sample">
+	{% if g.has_other_pages %}
+	  <ul class="pagination">
+			{% if g.has_previous %}
+	    <li class="page-item"><a class="page-link" href="?page={{g.previous_page_number}}">Previous</a></li>
+			{% else %}
+			<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+			{% endif %}
+
+			{% for i in g.paginator.page_range %}
+				{% if g.number == i %}
+	    		<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+				{% else %}
+					<li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+				{% endif %}
+	    {% endfor %}
+
+			{% if g.has_next %}
+	    	<li class="page-item"><a class="page-link" href="?page={{g.next_page_number}}">Next</a></li>
+			{% else %}
+				<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+			{% endif %}
+	  </ul>
+	{% endif %}
+</nav>
+
+
+ 
+
+
+
+{%endblock content%}

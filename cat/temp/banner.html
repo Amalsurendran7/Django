@@ -1,0 +1,143 @@
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style media="screen">
+      a:link {
+        text-decoration: none;
+      }
+  
+      h6 {
+        text-align: center;
+      }
+  
+      .row {
+        margin: 100px;
+      }
+  
+      .float{
+    position: fixed;
+    width:70px;
+    height:70px;
+    bottom:60px;
+    right:60px;
+    background-color:#3eb54d;
+    color:#FFF;
+    border-radius:50px;
+    text-align:center;
+    box-shadow: 5px 5px 5px #505050;
+  }
+  
+  .my-float{
+    margin-top:22px;
+  }
+    </style>
+     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+     <style>
+  
+  
+      .sidenav {
+        height: 100%;
+        width: 160px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        padding-top: 20px;
+      }
+      
+      .sidenav a {
+        padding: 6px 8px 6px 16px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
+      }
+      
+      .sidenav a:hover {
+        color: #f1f1f1;
+      }
+      
+      .main {
+        margin-left: 160px; /* Same as the width of the sidenav */
+        font-size: 28px; /* Increased text to enable scrolling */
+        padding: 0px 10px;
+      }
+      
+      @media screen and (max-height: 450px) {
+        .sidenav {padding-top: 15px;}
+        .sidenav a {font-size: 18px;}
+      }
+      </style>
+      
+      
+      
+      
+    
+  
+</head>
+<body>
+  <div class="sidenav">
+    <a href="{%url 'admuser'%}">customer</a>
+    <a href="{%url 'admhome'%}">product</a>
+    <a href="{%url 'alo'%}">logout</a>
+    <a href="{%url 'cat'%}">category</a>
+    <a href="{%url 'ban'%}">Banner</a>
+    <a href="{%url 'orderview'%}">orders</a>
+
+ 
+    
+  </div>
+  
+  <div class="main">
+
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="container register-form">
+          <div class="form">
+            <div class="note">
+              <p>ADD Banner</p>
+            </div>
+            <div class="form-content">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    
+                    
+                    <label for="">Banner Image</label>
+                    {% render_field productForm.image class="form-control" placeholder="Product Name" %}
+                  </div>
+                  <div class="form-group">
+                    <label for="">Short Description</label>
+                    {% render_field productForm.desc class="form-control"  %}
+                  </div>
+                  <div class="form-group">
+                    <label for="">Banner title</label>
+                    {% render_field productForm.title class="form-control" placeholder="title" %}
+                  </div>
+                  
+                  
+          </div>
+        </div>
+        <button type="submit" class="btnSubmit">ADD</button>
+      </div>
+    </div>
+  </div>
+</form>
+</div>
+</body>
+</html>
+
+
+
+      
