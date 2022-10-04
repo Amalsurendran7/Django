@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-(j7_$v_m_^$*k##=$m49uj2t845n8kugc$bgm&=fcg%j3qhvf*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1','fruitydjango.herokuapp.com/']
 
 
 # Application definition
