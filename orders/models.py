@@ -29,7 +29,7 @@ class Order(models.Model):
     STATUS = (
         ('confirmed', 'confrimed'),
         ('shipped', 'shipped'),
-        ('out of delivery', 'out of delivery'),
+        ('out for delivery', 'out for delivery'),
         ('delivered', 'delivered'),
     )
     
@@ -50,7 +50,7 @@ class Order(models.Model):
     order_total = models.FloatField()
     tax = models.FloatField()
     
-    status = models.CharField(max_length=100, choices=STATUS, default='New')
+    status = models.CharField(max_length=100, choices=STATUS)
     ip = models.CharField(blank=True, max_length=20)
     is_ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -71,11 +71,11 @@ class OrderProduct(models.Model):
     STATUS = (
         ('confirmed', 'confrimed'),
         ('shipped', 'shipped'),
-        ('out of delivery', 'out of delivery'),
+        ('out for delivery', 'out for delivery'),
         ('delivered', 'delivered'),
     )
  
-    status = models.CharField(max_length=100, choices=STATUS, default='New')
+    status = models.CharField(max_length=100, choices=STATUS)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     returned=models.CharField(max_length=100,default="False")
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)

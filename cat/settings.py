@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-(j7_$v_m_^$*k##=$m49uj2t845n8kugc$bgm&=fcg%j3qhvf*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'orders',
     'django_filters',
     'coupons',
-    'coupon_management'
+    
         
     
     

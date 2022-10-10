@@ -223,7 +223,7 @@ def plus(request, product_id, cart_item_id):
             return HttpResponse(cart_item.quantity)
 
 
-    return HttpResponse(1)        
+    return HttpResponse(10)        
 
        
       

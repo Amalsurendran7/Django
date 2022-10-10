@@ -68,13 +68,40 @@
           <td>{{p.email}}</td>
           <td>{{p.phone}}</td>
           
-          <td><a href="{%url 'block' p.id %}"><button class="btn {%if p.status == 'True'%} btn-danger    {%else%} btn-success {%endif%}rounded-pill w-5" onclick="return confirm('Are you sure?');">{%if p.status == 'True'%}
+          <td><a class="btn {%if p.status == 'True'%} btn-danger    {%else%} btn-success {%endif%}rounded-pill w-5" data-toggle="modal" data-target="#log{{p.id}}">{%if p.status == 'True'%}
             block
             {%else%}
             unblock
-            {%endif%}</button></a></td>
+            {%endif%}</a></td>
+
   
         </tr>
+        <div class="modal fade" id="log{{p.id}}" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Are you sure?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Proceed to {%if p.status == 'True'%}
+                  block
+                  {%else%}
+                  unblock 
+                  {%endif%} the user.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="{%url 'block' p.id %}">{%if p.status == 'True'%}
+                      block
+                      {%else%}
+                      unblock 
+                      {%endif%}</a>
+                </div>
+            </div>
+        </div>
+    </div>
         {%else%}
         <br><br><br>
         <h1>No customers!!</h1>

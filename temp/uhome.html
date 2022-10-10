@@ -95,7 +95,8 @@
 						<!-- menu start -->
 						<nav class="main-menu">
 							<ul>
-								<li class="current-list-item"><a href="{%url 'uhome'%}">Home</a></li>
+								<li class="current-list-item"><a href="{%url 'index'%}">Home</a></li>
+								<li class="current-list-item"><a href="{%url 'uhome'%}">shop</a></li>
 								{%if 'cusid' in request.session %}
 								
 								
@@ -104,7 +105,7 @@
 								<li><a href="{%url 'profile'%}">profile</a></li>
 								
 									<li><a href="{%url 'cart' %}">cart</a></li>	
-									<li><a href="{%url 'user_address' %}">address</a></li>	
+									
 									<li><a href="">Categories</a>
 										<ul class="sub-menu">
 											<li>{% for category in links %}
@@ -117,16 +118,13 @@
 									</li>
 								
 									{%else%}
-								<li><a type="button"  data-bs-toggle="modal" data-bs-target="#loginModal">
+								<li><a type="button"  href="{%url 'ulog' %}">
 									Login
 								</a>
 								</li>
-								<li><a href="{%url 'user_address' %}">address</a></li>	
+						
 
-								<!-- Button trigger modal -->
-  
-  <!-- Modal -->
-  										
+					
 										
 
 								
@@ -140,13 +138,13 @@
 								</li>
 								<li>
 									<div class="header-icons">
-										<a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
-										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+										<a class="shopping-cart" href="{%url 'cart'%}"><i class="fas fa-shopping-cart"></i></a>
+										<a class="mobile-hide search-bar-icon" href="#"></a>
 									</div>
 								</li>
 							</ul>
 						</nav>
-						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+						<a class="mobile-show search-bar-icon" href="#"></a>
 						<div class="mobile-menu"></div>
 						<!-- menu end -->
 					</div>
@@ -176,6 +174,8 @@
 	<!-- end search arewa -->
 	
 	<!-- breadcrumb-section -->
+	
+	
 	{%block t%}
 	<div class="breadcrumb-section breadcrumb-bg">
 		<div class="container">
@@ -303,19 +303,19 @@
 			<div class="card-body">
 			<label class="form-check">
 				
-				<a href="{%url 'filt' 500 %}">below 500</a>
+				<a href="{%url 'filt' 100 400 %}">100 to 400</a>
 		
 				
 			 
 			</label>
 			<label class="form-check">
-				<a href="{%url 'filt' 400 %}">below 400</a>
+				<a href="{%url 'filt' 400 800 %}">400 to 800</a>
 			
 			
 			  
 			</label>
 			<label class="form-check">
-				<a href="{%url 'filt' 300 %}">below300</a>
+				<a href="{%url 'filt' 800 1000 %}">800 to 1000</a>
 			  
 			</label>
 			</div> <!-- card-body.// -->
@@ -436,6 +436,28 @@
 	<!-- end logo carousel -->
 
 	<!-- footer -->
+
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h5 class="modal-title" id="exampleModalLabel">logout</h5>
+			  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			
+			<div class="modal-body">
+			  Are you sure you want to logout??
+			</div>
+			<div class="modal-footer">
+			  
+			<a href="{%url 'uhome'%}"><button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button></a>
+			<a href="{%url 'lo'%}"><button type="button" class="btn btn-primary">logout</button></a> 
+  
+			</div>
+		  </div>
+		</div>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	  </div>
 	<div class="footer-area">
 		<div class="container">
 			<div class="row">
@@ -459,11 +481,11 @@
 					<div class="footer-box pages">
 						<h2 class="widget-title">Pages</h2>
 						<ul>
-							<li><a href="index.html">Home</a></li>
-							<li><a href="about.html">About</a></li>
-							<li><a href="services.html">Shop</a></li>
-							<li><a href="news.html">News</a></li>
-							<li><a href="contact.html">Contact</a></li>
+							<li><a href="">Home</a></li>
+							<li><a href="">About</a></li>
+							<li><a href="">Shop</a></li>
+							<li><a href="">News</a></li>
+							<li><a href="">Contact</a></li>
 						</ul>
 					</div>
 				</div>
@@ -505,28 +527,9 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-		  <div class="modal-content">
-			<div class="modal-header">
-			  <h5 class="modal-title" id="exampleModalLabel">logout</h5>
-			  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			
-			<div class="modal-body">
-			  Are you sure you want to logout??
-			</div>
-			<div class="modal-footer">
-			  
-			<a href="{%url 'uhome'%}"><button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button></a>
-			<a href="{%url 'lo'%}"><button type="button" class="btn btn-primary">logout</button></a> 
-  
-			</div>
-		  </div>
-		</div>
-		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-	  </div>
-	  {%include 'userlog.html'%}
+	  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 	  {%for i in messages%}
 	

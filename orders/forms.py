@@ -1,6 +1,6 @@
 from django import forms
 from .models import Order, OrderProduct
-from coupon_management.models import Coupon
+
 
 
 class OrderForm(forms.ModelForm):

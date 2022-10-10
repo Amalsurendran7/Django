@@ -1,7 +1,40 @@
 {%extends 'admhome.html'%}
 
 {%block content%}
-<a href="{% url 'cre' %}"><button class="btn btn-primary">create</button></a>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<a href="" type="button" class="btn btn-primary" data-toggle="modal" data-target="#catModal">create</a>
+<div class="modal fade" id="catModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="logoutModalLabel">Create category</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'cre' %}" method="post">
+            {%csrf_token%}
+            <label for="fo">category name</label>
+           <input name="name" id="fo" class="form-control">
+           <label for="fo">category name</label>
+           <input name="slug" id="fo" class="form-control">
+         <button type="submit" class="btn btn-primary">Add</button> 
+         </form>
+
+          
+
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+           
+        </div>
+    </div>
+</div>
+</div>
+
 
               <table class="table table-hover  my-5" >
                 <thead class="thead">
@@ -19,8 +52,37 @@
                 <tr>
                   <td> {{i.category_name}}</td>
                   
-                  <td>                       <a href="{% url 'delet' i.pk%}"> <button class="btn btn-danger" >delete</button></a>
+                  <td> 
+                    <a href="#"  type='button' data-toggle="modal" data-target="#delete" class="btn btn-danger" >delete</a>
                     <a href="{% url 'cupd' i.pk%}"> <button class="btn btn-warning">update</button></a></td>
+
+                    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="delete">Delete category</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body">
+
+<h3 class="text-warningr">Are you Sure about this??</h3>
+         </form>
+
+          
+
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="{% url 'delet' i.pk%}">Proceed</a>
+        </div>
+    </div>
+</div>
+</div>
+                 
           
                 </tr>
                 {%else%}
@@ -30,7 +92,25 @@
                 {% endfor %}
               </table>
             
-      
+     {%if messages%}
+        {%for i in messages%}
+        <div id="message_container" class="alert alert-warning" role="alert">
+        {{i}}
+        
+        </div>
+  
+        {%endfor%}
+        {%endif%}
+        
+
+<script text="javascript">
+   var message_ele = document.getElementById("message_container");
+
+setTimeout(function(){ 
+   message_ele.style.display = "none"; 
+}, 3000);
+    </script>
+    
           {% if s.has_other_pages %}
           <ul class="pagination">
             {% if s.has_previous %}

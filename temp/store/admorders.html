@@ -45,11 +45,11 @@
 
     
        
-      <td><a class="btn btn-primary btn-xs" href="" data-toggle="modal" data-target="#updateModal"><span class="glyphicon glyphicon-edit">update status</span></a>
+      <td><a class="btn btn-primary btn-xs" href="" data-toggle="modal" data-target="#updateModal{{i.id}}"><span class="glyphicon glyphicon-edit">update status</span></a>
         <a class="btn btn-danger btn-xs" href="{% url 'delete_order' i.id  %}"><span class="glyphicon glyphicon-trash">cancel</span></a></td></tr>
         <h3>   </h3>
 
-        <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel"
+        <div class="modal fade" id="updateModal{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -67,25 +67,33 @@
                             <div class="note">
                               <p>Update Status Of Order</p>
                             </div>
+                            {%if i.status == "cancelled"%}
+                            <h2 class="text-center text-dark fw-bold">order has been cancelled </h2>
+
+                            {%else%}
                             <div class="form-content">
+
                       
                                   <label for="">Select status:</label>
                       
                                     {% render_field orderForm.status  class="form-control" placeholder="Address" %}
                                   </div>
-                      
+
                                 </div>
-                              </div>
-                           <a href="">   <button type="submit" class="btnSubmit btn-primary m-5">Update Order Status</button></a>
+                             <a href="">   <button type="submit" class="btnSubmit btn-primary m-5">Update Order Status</button></a>
+                        
+                                  </div>
+                                  {%endif%}
                       
+                            
                       </form>
                     
 
 
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="{%url 'alo'%}">Logout</a>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+                  
                 </div>
             </div>
         </div>

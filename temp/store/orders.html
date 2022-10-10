@@ -419,8 +419,10 @@
           </ul>
       </div>
   </div>
-
+  
+            
   <div class="col-9 mt-5" >
+    <li class="current-list-item"><a href="{%url 'uhome'%}">Home</a></li>
 
     <table class="table">
         <tr>
@@ -444,16 +446,18 @@
             
                 {%if i.order.is_ordered is True%}payed{%else%} COD{%endif%}</td>
             
-            <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orderModal">
+            <td>
+                {%if i.status != "cancelled" and  i.status != "out for delivery" %}<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orderModal{{i.id}}">
                     cancel
                   </button>
+                  {%endif%}
 
              <a href="{%url 'orderdetail' i.id  %}"  class="btn btn-primary">detail view</a></td>
                 
 
 
         </tr>
-        <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+        <div class="modal fade" id="orderModal{{i.id}}" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">

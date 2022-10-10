@@ -468,7 +468,7 @@
      <li class="list-group-item">Order number:{{h.order.order_number}} </li>    
   </ul>
 
-  {%if h.status == "delivered"%}
+  {%if h.status == "out for delivery"%}
   <a href="{%url 'ret' h.id%}" class="btn btn-primary">return product</a>
 
 {%endif%}

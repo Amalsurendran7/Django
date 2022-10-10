@@ -54,9 +54,10 @@ def logi(req):
         u=auth.authenticate(username=a,password=b)
         
         if u is not None:
-            auth.login(req,u)
+            
             print(req.user.is_authenticated)
-            req.session['kp']='variable'
+            req.session['kp']=123
+
              
             return redirect('admhome')
         else:
@@ -76,7 +77,8 @@ def logi(req):
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def lo(req):
     
-          req.session.flush()
+          del req.session['kp']
+     
           return redirect('uhome')
       
 
@@ -178,14 +180,34 @@ def u_address(request):
     else:
          return HttpResponse("failed")
             
+def c_address(request):
+    
+    
+    if request.method=='POST':
+        print("hloo")
+        add=request.POST.get('address')
+        print(add)
+        check=Address.objects.filter(addresssave=add,useradd=request.user)
+        if check:
+            messages.error(request,"you have already added this address")
+            return redirect("checkout")
+
+        else:    
+            k=Address(addresssave=add,useradd=request.user)
+            k.save()
+            return redirect("checkout")
+
+    return render(request,"store/address.html")
 
 
     
     
 import math
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-# @login_required(login_url='adm')
+
 def admhome(re):
+
+    if 'kp' in re.session:
     
         pi=produc.objects.all().distinct('name')
         
@@ -232,8 +254,13 @@ def admhome(re):
         
         return render(re,'admhome.html',context)
 
+    else:
+        return redirect('adm')     
+
 
 def admproduct(request):
+
+    if 'kp' in request.session:
        p=produc.objects.all().order_by('name')
        pro=ProductForm()
        coupon=couponForm()
@@ -249,7 +276,10 @@ def admproduct(request):
        except EmptyPage:
                         users = paginator.page(paginator.num_pages)
 
-       return render(request,"store/admproduct.html",{'g':users,'productForm':pro,'coupon':coupon})                
+       return render(request,"store/admproduct.html",{'g':users,'productForm':pro,'coupon':coupon}) 
+
+    else:
+        return redirect('adm')                  
 
 
   
@@ -322,7 +352,11 @@ def userlog(request):
 
                 
                 messages.info(request, "incorrect username or password") 
-                return redirect('/') 
+     
+                return redirect('ulog') 
+    else:
+        return render(request,"userlog.html")            
+           
             
 
     
@@ -330,24 +364,26 @@ def userlog(request):
      
      
 
-class cre(LoginRequiredMixin,CreateView):
-    model=category
-    template_name= 'categoryc.html'
-    context_object_name='g'
-    fields='__all__'
-    success_url= reverse_lazy("cat")
-    login_url = 'adm'
-    redirect_field_name='cre'
+def cre(request):
+    if request.method == "POST":
+        name=request.POST.get('name')
+        slug=request.POST.get('slug')
+        check=category.objects.filter(category_name=name)
+        if check:
+            messages.info(request,"Already exists")
+            return redirect("cat")
+
+        else:    
+            c=category(category_name=name,slug=slug)
+            print("huhu")
+            c.save()
+            return redirect('cat')
 
 
-class delet(LoginRequiredMixin,DeleteView):
-     model=category
-     template_name='cdelete.html'
-     pk_url_kwarg='pk'
-     success_url= reverse_lazy("cat")
-     
-     login_url='adm'
-     redirect_field_name='delet'
+def delet(request,id):
+    c=category.objects.get(id=id)
+    c.delete()
+    return redirect('cat')
 
 class cupd(LoginRequiredMixin,UpdateView):
     model=category
@@ -391,7 +427,7 @@ def sales(request):
             return render(request,'store/sales.html',context)
     return render(request,'store/sales.html')
 
-# sales per month.............................
+
 def monthly_sales(request):
     if 'month_date' in request.GET:
         month_date = request.GET['month_date']
@@ -541,7 +577,7 @@ def _wish_id(request):
     if not cart:
         cart = request.session.create()
     return cart
-
+@login_required(login_url="ulog")
 def wish_cart(request, product_id):
     #get the product
     # If the user is authenticated
@@ -680,8 +716,10 @@ def remove_wcart_item(request, product_id, cart_item_id):
        
 
 
-def filt(request,price):
-    products=produc.objects.filter(price__lte=price)
+def filt(request,price,price2):
+    products=produc.objects.filter(price__lte=price2,price__gte=price)
+    print(price)
+    print(price2)
     myFilter=productFilter(request.GET,queryset=products)
     products=myFilter.qs
     paginator = Paginator(products, 3)
@@ -919,13 +957,14 @@ def signup(request):
                         print("failed") 
 
                   else:
-                    print("invalid referral")
-                    messages.info(request,"invalid referral")       
+                    # print("invalid referral")
+                    # messages.info(request,"invalid referral")   
+                    pass    
                   
                   if 'phone' in request.session:
                     return redirect('emai')
                   else:
-                    return redirect('uhome')  
+                    return redirect('ulog')  
                 #   client = vonage.Client(key="9fd7e95f", secret="2V2n91tcD3d52kU7")
                 #   verify = vonage.Verify(client)
                 #   response = verify.start_verification(number="918590124080", brand="AcmeInc")
@@ -951,6 +990,12 @@ def signup(request):
 
         return render(request,"usignup.html")
 
+def index(request):
+    g=produc.objects.all()[:3]
+   
+    h=banner.objects.all()
+    context={'pro':g,'ban':h}
+    return render(request,"index.html",context)
 
 
 
@@ -1099,10 +1144,10 @@ def  otp(re):
     
     return render(re,"otp.html") 
 
-
 def orderview(request):
         
-        orders=OrderProduct.objects.all()
+        orders=OrderProduct.objects.all().order_by('id')
+
         orderF=orderFilter(request.GET,queryset=orders)
         orderForm=OForm()
         orders=orderF.qs
@@ -1216,7 +1261,9 @@ def profile(request):
     print(request.user)
     k=customer.objects.get(email=request.user)
     print(k.id)
+    
     w=Wallet.objects.get(user_e=request.user)
+    
 
 
     
@@ -1243,7 +1290,7 @@ def editprofile(request,user_id):
         return redirect('profile')
 
 def userorder(request):
-    orders=OrderProduct.objects.all()
+    orders=OrderProduct.objects.all().order_by("id")
     
     page = request.GET.get('page', 1)
 
@@ -1293,83 +1340,6 @@ def changepass(request,user_id):
                 print("different password")
                 return HttpResponseRedirect('/')
                     
-import re
-def validation(request):
-    if request.method == "POST":
-        first=request.POST.get("first_name")
-        second=request.POST.get("last_name")
-        email=request.POST.get("email")
-        phone=request.POST.get("phone")
-        address_line_1=request.POST.get("address_line_1")
-        city=request.POST.get("city")
-        state=request.POST.get("state")
-        country=request.POST.get("country")
-        order_note= request.POST.get("order_note")
-
-        regex = "^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$"
-        if not re.match(regex, email) and email :
-           if not re.match(regex, email): 
-             error= "It's not an email address."
-           elif email.startswith(""):
-              error="type email"  
-        
-
-
-        elif first :
-            if first.startswith(""):
-              error="type something"
-            elif len(first) > 20:
-
-               error ="first name maximum limit is 20"  
-
-        elif second :
-            if  second.startswith(""):
-              error="type second name"
-            elif len(second) >20:
-            
-               error ="second maximum limit is 20"   
-
-        elif phone  :
-            if phone is None:
-              error="type phonenumber"
-            elif len(phone) > 10:
-                error ="number shouldnt be larger than 10"   
-            elif isnan(phone):
-                  error="phone number should be number"
-
-            
-
-
-        elif address_line_1 :
-
-            if address_line_1.startswith(""):
-                error="type address" 
-
-            elif len(address_line_1)>100:
-
-                error="address length cant be greater than 100"  
-
-                             
-
-    
-
-     
-
-           
-
-
-            
-
-
-
-
-       
-
-
-
-    return HttpResponse(error)
-
-
 
 
 def adcancel(request,id):
@@ -1380,8 +1350,8 @@ def adcancel(request,id):
 
 
 
-def user_delete_order(request,id):
-    order=OrderProduct.objects.get(id=id)
+def user_delete_order(request,pk):
+    order=OrderProduct.objects.get(id=pk)
     order.status="cancelled"
     order.save()
     return redirect('userorder')
@@ -1413,8 +1383,11 @@ def plus(request,product_id):
 
 def cat(re):
 
+ if 'kp' in re.session:   
+
     ii=category.objects.all()
     page = re.GET.get('page', 1)
+    c=categoryForm()
 
     paginator = Paginator(ii, 7)
     try:
@@ -1423,7 +1396,11 @@ def cat(re):
                         users = paginator.page(1)
     except EmptyPage:
                         users = paginator.page(paginator.num_pages)
-    return render(re,"category.html",{'s':users})   
+
+    return render(re,"category.html",{'s':users,'category':c}) 
+
+ else:
+    return redirect('adm')    
 
     
 
@@ -1441,6 +1418,7 @@ class detail(DetailView):
     model=produc
     template_name='detailview.html'
     pk_url_kwarg='pk'
+ 
     def get(self,re,pk):
         prod=produc.objects.get(id=pk)
         return render(re,'detailview.html',{'h':prod})
@@ -1466,11 +1444,20 @@ from django.http import HttpResponse
 def render_to_pdf(template_src, context_dict):
     template = get_template(template_src)
     html  = template.render(context_dict)
-    result = io.BytesIO()
-    pdf = pisa.pisaDocument(io.BytesIO(html.encode("ISO-8859-1")), result)
-    if not pdf.err:
-        return HttpResponse(result.getvalue(), content_type='application/pdf')
-    return
+   
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+
+   
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funny view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+
+    return response
 
 def download(request,productID):
     v=OrderProduct.objects.get(id=productID)
@@ -1490,6 +1477,7 @@ def download(request,productID):
 
 
     }
+     
     return render_to_pdf('store/download.html',mydict)
 
 
@@ -1501,47 +1489,50 @@ def download(request,productID):
               
 
 def admuser(req):
-    if req.method =='POST':
-              s=req.POST['search']
-              if s is None:
-                  a=customer.objects.all().order_by('fname')
-                  page = req.GET.get('page', 1)
 
-                  paginator = Paginator(a, 7)
-                  try:
-                        users = paginator.page(page)
-                  except PageNotAnInteger:
-                        users = paginator.page(1)
-                  except EmptyPage:
-                        users = paginator.page(paginator.num_pages)
-                  return render(req,'admuser.html',{'h':users})
-              else:
-                  a=customer.objects.filter(fname__icontains=s).order_by('fname')
-                  page = req.GET.get('page', 1)
+  if 'kp' in req.session:  
+        if req.method =='POST':
+                s=req.POST['search']
+                if s is None:
+                    a=customer.objects.all().order_by('id')
+                    page = req.GET.get('page', 1)
 
-                  paginator = Paginator(a, 3)
-                  try:
-                        users = paginator.page(page)
-                  except PageNotAnInteger:
-                        users = paginator.page(1)
-                  except EmptyPage:
-                        users = paginator.page(paginator.num_pages)
+                    paginator = Paginator(a, 7)
+                    try:
+                            users = paginator.page(page)
+                    except PageNotAnInteger:
+                            users = paginator.page(1)
+                    except EmptyPage:
+                            users = paginator.page(paginator.num_pages)
+                    return render(req,'admuser.html',{'h':users})
+                else:
+                    a=customer.objects.filter(fname__icontains=s).order_by('id')
+                    page = req.GET.get('page', 1)
+
+                    paginator = Paginator(a, 3)
+                    try:
+                            users = paginator.page(page)
+                    except PageNotAnInteger:
+                            users = paginator.page(1)
+                    except EmptyPage:
+                            users = paginator.page(paginator.num_pages)
 
 
-                  return render(req,'admuser.html',{'h':users})
-    else:
-             a=customer.objects.all().order_by('fname')
-             page = req.GET.get('page', 1)
+                    return render(req,'admuser.html',{'h':users})
+        else:
+                a=customer.objects.all().order_by('id')
+                page = req.GET.get('page', 1)
 
-             paginator = Paginator(a, 7)
-             try:
-                        users = paginator.page(page)
-             except PageNotAnInteger:
-                        users = paginator.page(1)
-             except EmptyPage:
-                        users = paginator.page(paginator.num_pages)
-             return render(req,"admuser.html",{'h':users})
-
+                paginator = Paginator(a, 7)
+                try:
+                            users = paginator.page(page)
+                except PageNotAnInteger:
+                            users = paginator.page(1)
+                except EmptyPage:
+                            users = paginator.page(paginator.num_pages)
+                return render(req,"admuser.html",{'h':users})
+  else:
+        return redirect('adm')
 
 
 
@@ -1557,7 +1548,7 @@ def block(re,pk):
         k.save()
         
 
-    r=customer.objects.all()
+    r=customer.objects.all().order_by("id")
     return render(re,"admuser.html",{'h':r})    
  
 

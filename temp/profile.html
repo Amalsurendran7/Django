@@ -10,6 +10,13 @@
 	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+    .modal .modal-dialog { 
+   width: 500px; 
+
+}
+</style>
 </head>
 <body>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
@@ -116,18 +123,31 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">update password</h5>
-              <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              <h5 class="modal-title" id="exampleModalLabel"></h5>
+          
             </div>
+            <div class="container">
+                <div class="row">
+                  <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                    <div class="card border-0 shadow rounded-3 my-5">
+                      <div class="card-body p-4 p-sm-5">
+                        <h5 class="card-title text-center text-dark mb-5 fw-bold fs-5">Update password</h5>
             <form action="{%url 'changepass' user.id %}" method="POST">
                 {%csrf_token%}
-                <div class="modal-body">
+                
         
                 <label for=""> password</label>
                 <input type="text"  name="change" >
             <button id="fetchdata" type="submit">change</button>
-            </div>
+            
               </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 
               {%for i in message%}
               {{i}}
@@ -136,7 +156,7 @@
 
 
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary text-center" data-dismiss="modal">Close</button>
              
             </div>
           </div>
@@ -151,18 +171,29 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="addressModalLabel">Add new address</h5>
-            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">*</button>
+          
+           
           </div>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <div class="card border-0 shadow rounded-3 my-5">
+                  <div class="card-body p-4 p-sm-5">
+                    <h5 class="card-title text-center mb-5 fw-bold fs-5">Add Address</h5>
           <form  action="user_address" method="post">
     
             {%csrf_token%}
-          <div class="modal-body">
+      
             <label for="">enter address</label>
             <input type="text" name="address">
             <button type="submit">submit</button>
-          </div>
+          
         </form>
+    </div>
+</div>
+</div>
+</div>
+</div>
     
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -180,39 +211,58 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="updateModalLabel">update details</h5>
-            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            
+            
           </div>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <div class="card border-0 shadow rounded-3 my-5">
+                  <div class="card-body p-4 p-sm-5">
+                    <h5 class="card-title text-center mb-5 fw-bold fs-5">Edit profile</h5>
           <form  action="{% url 'editprofile' user.id %}" method="post">
     
             {%csrf_token%}
-          <div class="modal-body">
-            <div class="form-row">
-            <label for="">Firstname</label>
+   
+            <div class="form-floating mb-3">
+            <label for="floatingInput">Firstname</label>
            
-            <input type="text" name="f" value="{{user.fname}}"></div>
-            <div class="form-row">
-            <label for="">Last name</label>
-            <input type="text" name="l" value="{{user.lname}}"></div>
-            <div class="form-row">
-            <label for="">Email</label>
-            <input type="text" name="e" value="{{user.email}}"></div>
-            <div class="form-row">
-            <label for="">Phone</label>
-            <input type="text" name="p" value="{{user.phone}}"></div>
-            <div class="form-row">
-            <label for="">Address</label>
-            <input type="text" name="a" value="{{user.address}}"></div>
-            <div class="form-row">
-            <button type="submit">submit</button></div>
-          </div>
+            <input type="text" name="f" class="form-control" id="floatingInput" value="{{user.fname}}">
+            
+            <label for="floatingInput">Last name</label>
+            <input type="text" name="l" class="form-control" id="floatingInput" value="{{user.lname}}">
+    
+            <label for="floatingInput">Email</label>
+            <input type="text" name="e" class="form-control" id="floatingInput" value="{{user.email}}">
+            <label for="floatingInput">Phone</label>
+            <input type="text" name="p" class="form-control" id="floatingInput" value="{{user.phone}}">
+   
+            <label for="floatingInput">Address</label>
+            <input type="text" name="a" class="form-control" id="floatingInput"  value="{{user.address}}">
+            
+          
+            </div>
+            <button type="submit" class="btn btn-primary btn-center form-control m-4">submit</button></div>
+  
+        
+
+
+            
         </form>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
             
          
     
     
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+       
            
           </div>
         </div>
@@ -254,9 +304,11 @@
                   <div class="panel">
                       <div class="panel-body">
                           <div class="bio-chart">
-                              <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2" value="63" data-fgcolor="#4CC5CD" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(76, 197, 205); padding: 0px; -webkit-appearance: none; background: none;"></div>
-                          </div>
+                              <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2"  data-fgcolor="#4CC5CD" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(76, 197, 205); padding: 0px; -webkit-appearance: none; background: none;"></div>
+                              <i class="fa-solid fa-lock  fa-2x" style="color:#4CC5CD"  ></i></div>
                           <div class="bio-desk">
+                       
+
                               <h4 class="terques">Manage password </h4>
                               <a href="" type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal">change password</a> 
                               
@@ -268,8 +320,8 @@
                   <div class="panel">
                       <div class="panel-body">
                           <div class="bio-chart">
-                              <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2" value="75" data-fgcolor="#96be4b" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(150, 190, 75); padding: 0px; -webkit-appearance: none; background: none;"></div>
-                          </div>
+                              <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2"  data-fgcolor="#96be4b" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(150, 190, 75); padding: 0px; -webkit-appearance: none; background: none;"></div>
+                              <i class="fa-solid fa-address-card  fa-2x" style="color:rgb(12, 112, 82)"></i></div>
                           <div class="bio-desk">
                               <h4 class="green">Manage Address</h4>
                               
@@ -284,12 +336,12 @@
                   <div class="panel">
                       <div class="panel-body">
                           <div class="bio-chart">
-                              <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2" value="50" data-fgcolor="#cba4db" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(203, 164, 219); padding: 0px; -webkit-appearance: none; background: none;"></div>
-                          </div>
+                              <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2"  data-fgcolor="#cba4db" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(203, 164, 219); padding: 0px; -webkit-appearance: none; background: none;"></div>
+                              <i class="fa-solid fa-user fa-2x"  style="color:#cd4cb8"></i></div>
                           <div class="bio-desk">
-                              <h4 class="purple">Manage profile</h4>
+                              <h4 class="purple fs-3 fw-bold" style="font-family:'Times New Roman', Times, serif">Manage profile</h4>
                                
-            <a href="" type="button" class="btn btn-warning" data-toggle="modal" data-target="#updateModal">Edit profile</a>
+            <a href="" type="button" class="btn btn-warning " data-toggle="modal" data-target="#updateModal">Edit profile</a>
                             
                           </div>
                       </div>

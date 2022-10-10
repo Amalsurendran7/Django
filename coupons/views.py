@@ -8,6 +8,7 @@ from .models import *
 from pro.forms import *
 import datetime
 import sweetify
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -16,6 +17,7 @@ import sweetify
  # Create
 
 def off(request):
+  if 'kp' in request.session:  
     p=produc.objects.all()
       
     c=productoffer.objects.all()
@@ -24,6 +26,8 @@ def off(request):
     
 
     return render(request,"store/offer.html",context)
+  else:
+    return redirect('adm')  
 
 def productoffers(request):
 
@@ -276,10 +280,15 @@ def delcoffer(request,id):
 
     return redirect('offer')  
 
+
 def couponpage(request):
+
+  if 'kp' in request.session:  
     c=coupon.objects.all()
     context={'coupons':c}
-    return render(request,"store/couponpage.html",context)      
+    return render(request,"store/couponpage.html",context)
+  else:
+    return redirect('adm')        
 
 def addcoupon(request):
     

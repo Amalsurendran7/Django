@@ -34,11 +34,14 @@
 	<link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
 	<!-- responsive -->
 	<link rel="stylesheet" href="{%static 'css/responsive.css'%}">
+	<link rel="stylesheet" href="{%static 'css/ionicons.min.css'%}">
 	
 <link href="{% static 'fonts/fontawesome/css/all.min.css' %}" type="text/css" rel="stylesheet">
 	<link rel="stylesheet" href="{%static 'css/cropper.css'%}" >
 <style>
-	
+	a{
+		text-decoration: none !important;
+	}
         * {box-sizing: border-box;}
 
 .img-zoom-container {
@@ -78,6 +81,7 @@
 	<div class="top-header-area" id="sticker">
 		<div class="container">
 			<div class="row">
+				
 				<div class="col-lg-12 col-sm-12 text-center">
 					<div class="main-menu-wrap">
 						<!-- logo -->
@@ -95,12 +99,12 @@
 								{%if 'cusid' in request.session %}
 								
 								
-								<li><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">logout </button>
+								<li><a type="button"  data-bs-toggle="modal" data-bs-target="#exampleModal">logout </a>
 															  </li>
 								<li><a href="{%url 'profile'%}">profile</a></li>
 								
 									<li><a href="{%url 'cart' %}">cart</a></li>	
-									<li><a href="{%url 'user_address' %}">address</a></li>	
+									
 									<li><a href="">Categories</a>
 										<ul class="sub-menu">
 											<li>{% for category in links %}
@@ -113,12 +117,11 @@
 									</li>
 								
 									{%else%}
-								<li><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+								<li><a type="button"  href="{%url 'ulog' %}">
 									Login
-								  </button>
+								</a>
 								</li>
-								<li><a href="{%url 'user_address' %}">address</a></li>	
-
+								
 								<!-- Button trigger modal -->
   
   <!-- Modal -->
@@ -136,8 +139,8 @@
 								</li>
 								<li>
 									<div class="header-icons">
-										<a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
-										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+										<a class="shopping-cart" href="{%url 'cart' %}"><i class="fas fa-shopping-cart"></i></a>
+										<a class="mobile-hide search-bar-icon" href="#"></a>
 									</div>
 								</li>
 							</ul>
@@ -191,74 +194,176 @@
 	<div class="product-section mt-150 mb-150">
 		<div class="container">
 
-			<div class="row">
-                <div class="col-md-12">
-                    <div class="product-filters">
-                        <ul>
-                            <li class="active" data-filter="*"><a href="{%url 'uhome'%}">All</a></li>
-                            {% for category in links %}
-							<li data-filter=".strawberry"><a class="dropdown-item" href="{{ category.get_url }}">{{ category.category_name }} </a>
-							</li> {% endfor %}
-                           
-                        </ul>
-
-						<a href="{%url 'filt' 500 %}">below 500</a>
-						<a href="{%url 'filt' 400 %}">below 400</a>
-						<a href="{%url 'filt' 300 %}">below300</a>
-					
-
-                    </div>
-                </div>
-            </div>
 			<header class="border-bottom mb-4 pb-3">
 				<div class="form-inline">
 					<span class="mr-md-auto"><b>{{ product_count }}</b> items found </span>
 		
 				</div>
 		</header>
-		<div class="row">		
-			<form action="" method="get">
-			{{myFilter.form}}
-			<button class="btn btn-primary" type="submit">filter</button>
-		</form>
-	</div>
+		<div class="row">
+			<div class="col-8  my-5">
 
+			</div>
+			<div class="col-4">
+				<form action="" method="get">
+					{{myFilter.form}}
+					<button class="btn btn-primary" type="submit">Search</button>
+				</form>
+
+			</div>		
 		
-			<div class="row product-lists">
-				<!-- sect-heading -->
-			{%if products%}
+	</div>
+<!-- 
+	<div class="row">
+		{%if products%}
 			
                 {%for i in products%}
-				<div class="col-lg-4 col-md-6 text-center strawberry">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href=""><img src="{{i.img.url}}" style="width:200px;height:200px;" alt=""></a>
-						</div>
-						<h3>{{i.name}}</h3>
-						{%if i.offer != "None" %}
-						<p class="product-price"><span>Per Kg</span><s> {{i.offer}}</s> </p>
-						<p class="product-price"><span></span> {{i.price}} </p>
+    			<div class="col-md-6 col-lg-3 ftco-animate">
+    				<div class="product">
+    					<a href="#" class="img-prod"><img class="img-fluid" src="{{i.img.url}}" alt="Colorlib Template">
+    						<span class="status">30%</span>
+    						<div class="overlay"></div>
+    					</a>
+    					<div class="text py-3 pb-4 px-3 text-center">
+    						<h3><a href="#">i.name</a></h3>
+    						<div class="d-flex">
+    							<div class="pricing">
+									{%if i.offer != "None" %}
+						
+						<p class="price"><span class="mr-2 price-dc">Rs {{i.offer}}</span><span class="price-sale">Rs {{i.price}}</span></p>
 						{%else%}
-						<p class="product-price"><span>Per Kg</span> {{i.price}}</p>
+							
+						<p class="price"><span class="price-sale">Rs {{i.price}}</span></p>
 						{%endif%}
 
-						<a href="{% url 'detail' i.pk %}" class="cart-btn"><i class="fas fa-shopping-cart"></i> view</a>
-						<a href="{% url 'wish_cart' i.id %}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to wishlist</a>
-						</div>
-				</div>
-                {%endfor%}
-				{%else%}
+		    				
+		    					</div>
+	    					</div>
+	    					<div class="bottom-area d-flex px-3">
+	    						<div class="m-auto d-flex">
+	    							<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
+	    								<span><i class="ion-ios-menu"></i></span>
+	    							</a>
+	    							<a href="{% url 'detail' i.pk %}" class="buy-now d-flex justify-content-center align-items-center mx-1">
+	    								<span><i class="ion-ios-cart"></i></span>
+	    							</a>
+	    							<a href="{% url 'wish_cart' i.id %}" class="heart d-flex justify-content-center align-items-center ">
+	    								<span><i class="ion-ios-heart"></i></span>
+	    							</a>
+    							</div>
+    						</div>
+    					</div>
+    				</div>
+    			</div>
+				{%endfor%}
+				{% else %}
 				<div>
 					<h2>No result found. Please try again.</h2>
 				</div>
-				{% endif %}
-			
+				{% endif %} -->
+    		
 
+		<div class="row">
+			<div class="col-2">
+		
+		
+
+
+
+<div class="card">
+	<article class="card-group-item">
+		<header class="card-header">
+			<h6 class="title">Categories</h6>
+		</header>
+		<div class="filter-content">
+			<div class="card-body">
+			<form>
+				<label class="form-check">
 				
-			</div>
+					<a href="{%url 'uhome'%}">All</a>
+				</label> 
+				{%for category in links%}
+				<label class="form-check">
+					<a class="dropdown-item" href="{{ category.get_url }}">{{ category.category_name }} </a>
+				</label>
+				{%endfor%}
+				 <!-- form-check.// -->
+			</form>
 
+			</div> <!-- card-body.// -->
 		</div>
-		<div class="d-flex justify-content-center">
+	</article> <!-- card-group-item.// -->
+	
+	<article class="card-group-item">
+		<header class="card-header">
+			<h6 class="title">price filter </h6>
+		</header>
+		<div class="filter-content">
+			<div class="card-body">
+			<label class="form-check">
+				
+				<a href="{%url 'filt' 100 400 %}">100 to 400</a>
+		
+				
+			 
+			</label>
+			<label class="form-check">
+				<a href="{%url 'filt' 400 800 %}">400 to 800</a>
+			
+			
+			  
+			</label>
+			<label class="form-check">
+				<a href="{%url 'filt' 800 1000 %}">800 to 1000</a>
+			  
+			</label>
+			</div> <!-- card-body.// -->
+		</div>
+	</article> <!-- card-group-item.// -->
+</div> 
+		
+		</div>
+		<div class="col-9">
+			<div class="row ">		
+	
+			
+				{%if products%}
+				
+					{%for i in products%}
+					<div class="col-lg-4 col-md-4 text-center strawberry">
+						<div class="single-product-item">
+							<div class="product-image">
+								<a href=""><img src="{{i.img.url}}" style="width:200px;height:200px;" alt=""></a>
+							</div>
+							<h3>{{i.name}}</h3>
+							{%if i.offer != "None" and i.o_percentage != 0 %}
+							<p class="product-price"><span>Per Kg</span><s> {{i.offer}}</s> {{i.price}}  </p>
+							<p>{{i.o_percentage}}%<span>off</span></p>
+							
+							{%else%}
+							<p></p>
+							<p class="product-price"><span>Per Kg</span> {{i.price}}</p>
+							{%endif%}
+	
+							<a href="{% url 'detail' i.pk %}" class="cart-btn"><i class="fas fa-shopping-cart"></i> view</a>
+							<a href="{% url 'wish_cart' i.id %}" class="cart-btn my-2"><i class="fas fa-shopping-cart"></i> Add to wishlist</a>
+							</div>
+					</div>
+					{%endfor%}
+					{%else%}
+					<div>
+						<h2>No result found. Please try again.</h2>
+					</div>
+					{% endif %}
+		
+	
+					
+			
+	
+			</div>
+	
+		</div></div>
+				<div class="d-flex justify-content-center">
 		<nav class="mt-4" aria-label="Page navigation sample">
 	{% if products.has_other_pages %}
 	  <ul class="pagination">
@@ -295,7 +400,7 @@
 	{%endblock%}
 	{%block f%}
 	
-	<section class="cart-banner pt-100 pb-100">
+	<section class="cart-banner pt-100 pb-100 " style="margin-top:150px;">
     	<div class="container">
         	<div class="row clearfix">
             	<!--Image Column-->

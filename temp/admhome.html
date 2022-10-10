@@ -47,9 +47,10 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                <a class="nav-link " href="{%url 'admhome'%}">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span> Dashboard</span>
+                </a>
             </li>
 
             <!-- Divider -->
@@ -57,7 +58,7 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Interface
+            
             </div>
            
            
@@ -78,10 +79,7 @@
                     <i class="fas fa-fw fa-cog"></i>
                     <span> Sales</span>
                 </a>
-                <a class="nav-link " href="{%url 'admhome'%}">
-                <i class="fas fa-fw fa-wrench"></i>
-                <span> Dashboard</span>
-            </a>
+              
             <a class="nav-link " href="{%url 'cat'%}" >
             <i class="fas fa-fw fa-wrench"></i>
             <span> category </span>
@@ -108,7 +106,7 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Addons
+                
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -117,10 +115,7 @@
                     <i class="fas fa-fw fa-folder"></i>
                     <span>  orders</span>
                 </a>
-                <a class="nav-link" href="{%url 'chart'%}">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-                    
+       
                     <a class="nav-link" href="{%url 'offer'%}">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>offers</span></a>
@@ -144,11 +139,11 @@
             </div>
 
             <!-- Sidebar Message -->
-            <div class="sidebar-card d-none d-lg-flex">
-                <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
+            <!-- <div class="d-none d-lg-flex">
+        
                 <p class="text-center mb-2"><strong> Admin</strong> </p>
-                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro"></a>
-            </div>
+              
+            </div> -->
 
         </ul>
         <!-- End of Sidebar -->
@@ -181,6 +176,25 @@
                     </form>
                     
                     <a href="" type="button" data-toggle="modal" data-target="#logoutModal">logout</a>
+                    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="logoutModalLabel">Ready to Leave?</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                <a class="btn btn-primary" href="{%url 'alo'%}">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
 
                     <!-- Topbar Navbar -->
                     
@@ -194,10 +208,10 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <a href="{%url 'export_to_excel'%}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate report excel</a>
-                                <a href="{%url 'export_to_pdf'%}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                    class="fas fa-download fa-sm text-white-50"></i> Generate report pdf</a>       
+                        <a href="" class="d-none d-sm-inline-block  shadow-sm"><i
+                                class="fas fa-download fa-sm text-white-50"></i> </a>
+                                <a href="" class="d-none d-sm-inline-block shadow-sm"><i
+                                    class="fas fa-download fa-sm text-white-50"></i> </a>       
                     </div>
 
                     <!-- Content Row -->
@@ -271,7 +285,7 @@
                         </div>
 
                         <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <!-- <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -286,7 +300,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <!-- Content Row -->
@@ -490,7 +504,7 @@
                         <div class="col-lg-6 mb-4">
 
                             <!-- Illustrations -->
-                            <div class="card shadow mb-4">
+                            <!-- <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
                                 </div>
@@ -501,14 +515,14 @@
                             </div>
                             </div>
 
-                            <!-- Approach -->
+                            <!-
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
                                 </div>
                                 <div class="card-body">
                                     </div>
-                            </div>
+                            </div> -->
 
                         </div>
                     </div>
@@ -541,24 +555,6 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="logoutModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="{%url 'alo'%}">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
     {%endblock content%}
 
     <!-- Bootstrap core JavaScript-->

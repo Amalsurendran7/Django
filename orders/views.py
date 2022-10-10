@@ -29,7 +29,7 @@ def sales(request):
     return render(request,"store/sales.html",context)
 
 
-
+@login_required(login_url="ulog")
 def payments(request):
 
     print('payment')
@@ -220,7 +220,7 @@ def place_order(request, total=0, quantity=0,):
             data.payment_method=form.cleaned_data['payment_method']
         
             
-            
+            data.status="confirmed"
             data.order_total = grand_total
             data.tax = tax
             data.ip = request.META.get('REMOTE_ADDR')
@@ -256,6 +256,7 @@ def place_order(request, total=0, quantity=0,):
                 orderproduct.quantity = item.quantity
                 orderproduct.product_price = item.product.price
                 orderproduct.ordered = True
+                orderproduct.status="confirmed"
                 orderproduct.save()
            
                 if data.payment_method == "cod":
@@ -317,15 +318,16 @@ def place_order(request, total=0, quantity=0,):
 
 
 
-def chart(request):
-    labels=[]
-    data=[]
-    pay=Payment.objects.all()
-    for p in pay:
-        labels.append(p.user.fname)
-        data.append(p.amount_paid)
-    context={'labels':labels,'data':data}
-    return render(request,"store/chart.html",context)     
+# @login_required(login_url='adm')
+# def chart(request):
+#     labels=[]
+#     data=[]
+#     pay=Payment.objects.all()
+#     for p in pay:
+#         labels.append(p.user.fname)
+#         data.append(p.amount_paid)
+#     context={'labels':labels,'data':data}
+#     return render(request,"store/chart.html",context)     
 
         
               
