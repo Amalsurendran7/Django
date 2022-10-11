@@ -138,7 +138,14 @@ class produc(models.Model):
         return self.name
 
     def get_url(self):
-            return reverse('products_by_price', args=[self.slug])       
+            return reverse('products_by_price', args=[self.slug])  
+
+class SalesReport(models.Model):
+    productName = models.CharField(max_length=100)
+    categoryName = models.CharField(max_length=100)
+    date = models.DateField()
+    quantity = models.IntegerField()
+    productPrice = models.FloatField()                 
     
 
 class banner(models.Model):

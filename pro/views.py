@@ -14,6 +14,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from orders.models import *
 from .models import *
 from coupons.forms import *
+from django.db.models import Sum
 
 import datetime
 from .filters import *
@@ -341,174 +342,6 @@ def ban(request):
     return render(request,'banner.html',{'productForm':BannerForm})
 
 
-def sales(request):
-    if 'date' in request.GET:
-        date = request.GET['date']
-        
-        Total = 0
-        if date:
-            excel_products = sales_report.objects.all().delete()
-            products =OrderProduct.objects.order_by('-created_at').filter(created_at__icontains=date)
-            print("sales",products)
-            for product in products:
-                excel_products = sales_report()
-                excel_products.date = product.created_at
-                excel_products.product_name = product.product.name
-                excel_products.quantity = product.quantity
-                excel_products.amount = product.order.order_total
-                Total += product.order.order_total
-                excel_products.save()
-            context = {
-            'products':products,
-            }
-            return render(request,'store/sales.html',context)
-    return render(request,'store/sales.html')
-
-
-def monthly_sales(request):
-    if 'month_date' in request.GET:
-        month_date = request.GET['month_date']
-        Total = 0
-        if month_date:
-            excel_products = monthly_sales_report.objects.all().delete()
-            # months = OrderProduct.objects.annotate(month=ExtractMonth('created_at'))
-            months = OrderProduct.objects.filter(created_at__icontains = month_date)
-            print("months",months)
-            for month in months:
-                excel_products = monthly_sales_report()
-                excel_products.date = month.created_at
-                excel_products.product_name = month.product.name
-                excel_products.quantity = month.quantity
-                excel_products.amount = month.order.order_total
-                Total += month.order.order_total
-                excel_products.save()
-            context = {
-                'month_products': months,
-                'Total':Total
-            }
-            return render(request, 'store/sales.html', context)
-
-    return redirect(sales)
-
-# sales per day excel download................
-
-def export_to_excel(request):
-    response = HttpResponse(content_type='application/ms-excel')
-    response['content-Disposition'] = 'attachment; filename="sales.xls"'
-    wb = xlwt.Workbook(encoding='utf-8')
-    # this will generate a file named as sales Report
-    ws = wb.add_sheet('Sales Report')
-
-    # Sheet header, first row
-    row_num = 0
-
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-
-    columns = ['Date','Product Name', 'Quantity', 'Amount', ]
-
-    for col_num in range(len(columns)):
-    # at 0 row 0 column
-        ws.write(row_num, col_num, columns[col_num], font_style)
-
-    font_style = xlwt.XFStyle()
-    total = 0
-    rows = sales_report.objects.all().values_list('date','product_name', 'quantity', 'amount')
-
-    print("row", rows)
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], font_style)
-
-    wb.save(response)
-    return response
-
-
-def export_to_pdf(request):
-    rows = sales_report.objects.all()
-    
-    
-    template_path = 'store/sales_pdf.html'
-    context = {
-        'report':rows
-    }
-    
-    # csv file can also be generated using content_type='application/csv
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-        html, dest=response)
-    # if error then show some funny view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-
-    return response  
-
-
-def export_to_excel1(request):
-    response = HttpResponse(content_type='application/ms-excel')
-    response['content-Disposition'] = 'attachment; filename="sales.xls"'
-    wb = xlwt.Workbook(encoding='utf-8')
-    # this will generate a file named as sales Report
-    ws = wb.add_sheet('Sales Report')
-
-    # Sheet header, first row
-    row_num = 0
-
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-
-    columns = ['Date','Product Name', 'Quantity', 'Amount', ]
-
-    for col_num in range(len(columns)):
-    # at 0 row 0 column
-        ws.write(row_num, col_num, columns[col_num], font_style)
-
-    font_style = xlwt.XFStyle()
-    total = 0
-    rows = monthly_sales_report.objects.all().values_list('date','product_name', 'quantity', 'amount')
-
-    print("row", rows)
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], font_style)
-
-    wb.save(response)
-    return response
-
-
-def export_to_pdf1(request):
-    rows = monthly_sales_report.objects.all()
-    
-    
-    template_path = 'store/sales_pdf.html'
-    context = {
-        'report':rows
-    }
-    # csv file can also be generated using content_type='application/csv
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-        html, dest=response)
-    # if error then show some funny view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-
-    return response    
-
-
 def _wish_id(request):
     cart = request.session.session_key
     if not cart:
@@ -812,6 +645,227 @@ def ulo(r):
 
 
 
+
+def sales_report_date(request):
+    data = OrderProduct.objects.all()
+    if request.method == 'POST':
+        if request.POST.get('month'):
+            month = request.POST.get('month')
+            print(month)
+            data = OrderProduct.objects.filter(created_at__icontains=month)
+            
+            if data:
+                if SalesReport.objects.all():
+                    SalesReport.objects.all().delete()
+                    for i in data:
+                        sales = SalesReport()
+                        sales.productName = i.product.name
+                        sales.categoryName = i.product.cate_id.category_name
+                        sales.date = i.created_at
+                        sales.quantity = i.quantity
+                        sales.productPrice = i.product_price
+                        sales.save()
+                    sales = SalesReport.objects.all()
+                    total = SalesReport.objects.all().aggregate(Sum('productPrice'))
+                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    return render(request,'sales_report_.html',context)
+                else:
+                    for i in data:
+                        sales = SalesReport()
+                        sales.productName = i.product.name
+                        sales.categoryName = i.product.cate_id.category_name
+                        sales.date = i.created_at
+                        sales.quantity = i.quantity
+                        sales.productPrice = i.product_price
+                        sales.save()
+                    sales = SalesReport.objects.all()
+                    total = SalesReport.objects.all().aggregate(Sum('productPrice'))
+                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    return render(request,'sales_report_.html',context)
+            else:
+                messages.warning(request,"Nothing Found!!")
+        if request.POST.get('date'):
+            date = request.POST.get('date')
+            print("0,",date)
+            
+            date_check = OrderProduct.objects.filter(created_at__icontains=date)
+            print(date_check)
+            if date_check:
+                if SalesReport.objects.all():
+                    SalesReport.objects.all().delete()
+            
+                    for i in date_check:
+                        sales = SalesReport()
+                        sales.productName = i.product.name
+                        sales.categoryName = i.product.cate_id.category_name
+                        sales.date = i.created_at
+                        sales.quantity = i.quantity
+                        sales.productPrice = i.product_price
+                        sales.save()
+                    sales = SalesReport.objects.all()
+                    total = SalesReport.objects.all().aggregate(Sum('productPrice'))
+                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    return render(request,'sales_report_.html',context)
+                else:
+                    for i in date_check:
+                        sales = SalesReport()
+                        sales.productName = i.product.name
+                        sales.categoryName = i.product.cate_id.category_name
+                        sales.date = i.created_at
+                        sales.quantity = i.quantity
+                        sales.productPrice = i.product_price
+                        sales.save()
+                    sales = SalesReport.objects.all()
+                    total = SalesReport.objects.all().aggregate(Sum('productPrice'))
+                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    return render(request,'sales_report_.html',context)
+            else:
+                messages.warning(request,"Nothing Found!!")
+        if request.POST.get('date1'):
+            date1 = request.POST.get('date1')
+            date2 = request.POST.get('date2')
+            data_range = OrderProduct.objects.filter(created_at__gte=date1,created_at__lte=date2)
+            if data_range:
+                if SalesReport.objects.all():
+                    SalesReport.objects.all().delete()
+            
+                    for i in data_range:
+                        sales = SalesReport()
+                        sales.productName = i.product.name
+                        sales.categoryName = i.product.cate_id.category_name
+                        sales.date = i.created_at
+                        sales.quantity = i.quantity
+                        sales.productPrice = i.product_price
+                        sales.save()
+                    sales = SalesReport.objects.all()
+                    total = SalesReport.objects.all().aggregate(Sum('productPrice'))
+                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    return render(request,'sales_report_.html',context)
+                else:
+                    for i in data_range:
+                        sales = SalesReport()
+                        sales.productName = i.product.name
+                        sales.categoryName = i.product.cate_id.category_name
+                        sales.date = i.created_at
+                        sales.quantity = i.quantity
+                        sales.productPrice = i.product_price
+                        sales.save()
+                    sales = SalesReport.objects.all()
+                    total = SalesReport.objects.all().aggregate(Sum('productPrice'))
+                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    return render(request,'sales_report_.html',context)
+            else:
+                messages.warning(request,"Nothing Found!!")
+    if data:
+        if SalesReport.objects.all():
+            SalesReport.objects.all().delete()
+            for i in data:
+                sales = SalesReport()
+                sales.productName = i.product.name
+                sales.categoryName = i.product.cate_id.category_name
+                sales.date = i.created_at
+                sales.quantity = i.quantity
+                sales.productPrice = i.product_price
+                sales.save()
+            sales = SalesReport.objects.all()
+            total = SalesReport.objects.all().aggregate(Sum('productPrice'))
+            context = { 'sales':sales,'total':total['productPrice__sum']}
+            return render(request,'sales_report_.html',context)
+
+        else:
+            for i in data:
+                sales = SalesReport()
+                sales.productName = i.product.name
+                sales.categoryName = i.product.cate_id.category_name
+                sales.date = i.created_at
+                sales.quantity = i.quantity
+                sales.productPrice = i.product_price
+                sales.save()
+            sales = SalesReport.objects.all()
+            total = SalesReport.objects.all().aggregate(Sum('productPrice'))
+            context = { 'sales':sales,'total':total['productPrice__sum']}
+            return render(request,'sales_report_.html',context)
+        
+    else:
+        messages.warning(request,"Nothing Found!!")
+    
+    return render(request,'sales_report_.html')
+
+def export_to_excel(request):
+    response = HttpResponse(content_type = 'application/ms-excel')
+    response['content-Disposition'] = 'attachment; filename="sales.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Sales Report') #this will generate a file named as sales Report
+
+     # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['Product Name','Category','Price','Quantity', ]
+
+    for col_num in range(len(columns)):
+        # at 0 row 0 column
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    
+    font_style = xlwt.XFStyle()
+    total = 0
+
+    rows = SalesReport.objects.values_list(
+        'productName','categoryName', 'productPrice', 'quantity')
+    for row in rows:
+        total +=row[2]
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+    row_num += 1
+    col_num +=1
+    ws.write(row_num,col_num,total,font_style)
+
+    wb.save(response)
+
+    return response
+
+
+
+def export_to_pdf(request):
+    prod = produc.objects.all()
+    order_count = []
+    # for i in prod:
+    #     count = SalesReport.objects.filter(product_id=i.id).count()
+    #     order_count.append(count)
+    #     total_sales = i.price*count
+    sales = SalesReport.objects.all()
+    total_sales = SalesReport.objects.all().aggregate(Sum('productPrice'))
+
+
+
+    template_path = 'sales_pdf.html'
+    context = {
+        'brand_name':prod,
+        'order_count':sales,
+        'total_amount':total_sales['productPrice__sum'],
+    }
+    
+    # csv file can also be generated using content_type='application/csv
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funny view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+
+    return response
+
+
 from django.utils.crypto import get_random_string
 def signup(request):
    
@@ -1039,10 +1093,10 @@ def  otp(re):
             print(a.password)
             
             
-            print(k) 
-            if k:
-             print('entered')
-             auth.login(re,a)
+            
+            print('entered')
+            auth.login(re,a)
+            re.session['cusid']=1233 
             return redirect('uhome')
              
         else:

@@ -7,8 +7,7 @@ urlpatterns = [
      path('shop',uhome,name='uhome' ),
     path('myadmin',logi,name='adm' ),
     path('admhome',admhome,name='admhome' ),
-      path('monthly_sales',monthly_sales,name='monthly_sales' ),
-      path('sales',sales,name='sales' ),
+    
         path('alo',lo,name='alo' ),
         path('filt/<int:price>/<int:price2>',filt,name='filt' ),
             path('addp',admin_add_product_view,name='addp' ),
@@ -22,12 +21,12 @@ urlpatterns = [
                    path('category/<slug:category_slug>/',uhome, name='products_by_category'),
                    path('admproduct',admproduct,name='admproduct'), 
                     path('ret/<int:id>',ret,name='ret'), 
-                    path('u_address',u_address,name='u_address'), 
+                    path('u_address',u_address,name='u_address'),
+                     path('sales_report_date',sales_report_date,name='sales_report_date'), 
                      path('c_address',c_address,name='c_address'), 
                       path('export_to_excel',export_to_excel,name='export_to_excel'), 
                        path('export_to_pdf',export_to_pdf,name='export_to_pdf'),
-                       path('export_to_excel1',export_to_excel1,name='export_to_excel1'), 
-                       path('export_to_pdf1',export_to_pdf1,name='export_to_pdf1'), 
+                      
                    
                  
 

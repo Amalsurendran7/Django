@@ -44,6 +44,8 @@
 	}
         * {box-sizing: border-box;}
 
+
+
 .img-zoom-container {
   position: relative;
 }
@@ -333,13 +335,16 @@
 					{%for i in products%}
 					<div class="col-lg-4 col-md-4 text-center strawberry">
 						<div class="single-product-item">
+							
 							<div class="product-image">
 								<a href=""><img src="{{i.img.url}}" style="width:200px;height:200px;" alt=""></a>
 							</div>
 							<h3>{{i.name}}</h3>
 							{%if i.offer != "None" and i.o_percentage != 0 %}
 							<p class="product-price"><span>Per Kg</span><s> {{i.offer}}</s> {{i.price}}  </p>
-							<p>{{i.o_percentage}}%<span>off</span></p>
+							<button type="button" class="btn btn-primary btn-circle btn-xl">{{i.o_percentage}}%off</button>
+							
+						
 							
 							{%else%}
 							<p></p>
