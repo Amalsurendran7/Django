@@ -5,6 +5,7 @@
 {%block content%}
 {%load widget_tweaks%}
 
+
 <table class="table m-4 me-5" id="dev-table">
     <thead class="thead">
      <tr> <th>name</th>
@@ -46,7 +47,9 @@
     
        
       <td><a class="btn btn-primary btn-xs" href="" data-toggle="modal" data-target="#updateModal{{i.id}}"><span class="glyphicon glyphicon-edit">update status</span></a>
-        <a class="btn btn-danger btn-xs" href="{% url 'delete_order' i.id  %}"><span class="glyphicon glyphicon-trash">cancel</span></a></td></tr>
+        {%if i.status != "cancelled"%}
+        <a class="btn btn-danger btn-xs" href="{% url 'delete_order' i.id  %}"><span class="glyphicon glyphicon-trash">cancel</span></a>
+      {%endif%}</td></tr>
         <h3>   </h3>
 
         <div class="modal fade" id="updateModal{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel"
@@ -101,6 +104,56 @@
     
 
     {%endfor%}
+
+    <div class="modal fade" id="bannerModal" tabindex="-1" aria-labelledby="bannerModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="bannerModalLabel">Add Banner</h5>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">*</button>
+          </div>
+          <form method="post" action="{%url 'ban'%}" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="container register-form">
+               
+              <div class="row">
+                      <div class="col-9">
+                        <div class="form-group">
+                          
+                          
+                          <label for="">Banner Image</label>
+                          {% render_field productForm.image class="form-control" placeholder="Product Name" %}
+                        </div>
+                        <div class="form-group">
+                          <label for="">Short Description</label>
+                          {% render_field productForm.desc class="form-control"  %}
+                        </div>
+                        <div class="form-group">
+                          <label for="">Banner title</label>
+                          {% render_field productForm.title class="form-control" placeholder="title" %}
+                        </div>
+                        <div class="form-group">
+                         
+              <button type="submit" class=" btn btn-primary">ADD</button>
+                          
+                        </div>
+                        
+                        
+                </div>
+              </div>
+            </div>
+      </form>
+  
+  
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+           
+          </div>
+        </div>
+      </div>
+    </div>
+  
+
 
 
 

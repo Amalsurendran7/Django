@@ -96,75 +96,6 @@ def user_address(request):
     return render(request,"store/address.html")
 
 import xlwt
-# def export_to_excel(request):
-#     response = HttpResponse(content_type = 'application/ms-excel')
-#     response['content-Disposition'] = 'attachment; filename="sales.xls"'
-#     wb = xlwt.Workbook(encoding='utf-8')
-#     ws = wb.add_sheet('Sales Report') #this will generate a file named as sales Report
-
-#      # Sheet header, first row
-#     row_num = 0
-
-#     font_style = xlwt.XFStyle()
-#     font_style.font.bold = True
-
-#     columns = ['Order_ID', 'User Id','Amount', ]
-
-#     for col_num in range(len(columns)):
-#         # at 0 row 0 column
-#         ws.write(row_num, col_num, columns[col_num], font_style)
-
-    
-#     font_style = xlwt.XFStyle()
-#     total = 0
-
-#     rows = Order.objects.values_list(
-#         'order_number', 'user', 'order_total')
-#     for row in rows:
-#         total +=row[2]
-#         row_num += 1
-#         for col_num in range(len(row)):
-#             ws.write(row_num, col_num, row[col_num], font_style)
-#     row_num += 1
-#     col_num +=1
-#     ws.write(row_num,col_num,total,font_style)
-
-#     wb.save(response)
-
-#     return response
-
-# def export_to_pdf(request):
-#     prod = produc.objects.all()
-#     order_count = []
-#     for i in prod:
-#         count = OrderProduct.objects.filter(product_id=i.id).count()
-#         order_count.append(count)
-#         total_sales = i.price*count
-
-#     template_path = 'store/sales.html'
-#     context = {
-#         'brand_name':prod,
-#         'order_count':order_count,
-#         'total_amount':total_sales,
-#     }
-    
-#     # csv file can also be generated using content_type='application/csv
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
-
-#     template = get_template(template_path)
-#     html = template.render(context)
-
-#     # create a pdf
-#     pisa_status = pisa.CreatePDF(
-#         html, dest=response)
-#     # if error then show some funny view
-#     if pisa_status.err:
-#         return HttpResponse('We had some errors <pre>' + html + '</pre>')
-
-#     return response    
-
-
 
 def u_address(request):
     
@@ -261,9 +192,10 @@ def admhome(re):
 def admproduct(request):
 
     if 'kp' in request.session:
-       p=produc.objects.all().order_by('name')
+       p=produc.objects.all()
        pro=ProductForm()
-       coupon=couponForm()
+       productForm=BannerForm()
+      
        myFilter=productFilter(request.GET,queryset=p)
        p=myFilter.qs
        page = request.GET.get('page', 7)
@@ -276,7 +208,7 @@ def admproduct(request):
        except EmptyPage:
                         users = paginator.page(paginator.num_pages)
 
-       return render(request,"store/admproduct.html",{'g':users,'productForm':pro,'coupon':coupon}) 
+       return render(request,"store/admproduct.html",{'g':users,'productForm':pro,'b':productForm}) 
 
     else:
         return redirect('adm')                  
@@ -381,8 +313,13 @@ def cre(request):
 
 
 def delet(request,id):
+    
     c=category.objects.get(id=id)
-    c.delete()
+    pr=produc.objects.filter(cate_id=c)
+    if pr:
+        messages.info(request,"products of these categories are already added .delete them to proceed")
+    else:    
+      c.delete()
     return redirect('cat')
 
 class cupd(LoginRequiredMixin,UpdateView):
@@ -877,22 +814,7 @@ def ulo(r):
 
 from django.utils.crypto import get_random_string
 def signup(request):
-    # userForm=CustomerForm()
-    
-    # mydict={'userForm':userForm}
-    # if request.method=='POST':
-    #     userForm=CustomerForm(request.POST)
-        
-    #     if userForm.is_valid() :
-    #         user=userForm.save()
-    #         user.set_password(user.password)
-    #         user.set_email(user.email)
-    #         user.set_fname(user.fname)
-    #         user.set_lname(user.lname)
-    #         user.set_phone(user.phone)
-    #         user.set_username(user.username)
-    #         user.save()
-    #     return redirect('ulog')
+   
 
         if 'si' in request.session:
             messages.error(request,"verification failed ...enter correct phone number!!!")
@@ -1116,11 +1038,11 @@ def  otp(re):
             print(a.username)
             print(a.password)
             
-            k=auth.authenticate(username=a.username,password=a.password)
+            
             print(k) 
             if k:
              print('entered')
-             auth.login(re,k)
+             auth.login(re,a)
             return redirect('uhome')
              
         else:
@@ -1148,9 +1070,9 @@ def orderview(request):
         
         orders=OrderProduct.objects.all().order_by('id')
 
-        orderF=orderFilter(request.GET,queryset=orders)
-        orderForm=OForm()
-        orders=orderF.qs
+   
+        pf=BannerForm()
+    
         page = request.GET.get('page', 1)
 
         paginator = Paginator(orders, 7)
@@ -1160,7 +1082,7 @@ def orderview(request):
                             users = paginator.page(1)
         except EmptyPage:
                             users = paginator.page(paginator.num_pages)
-        return render(request,'store/admorders.html',{'data':users,'ofilter':orderF,'orderForm':orderForm}) 
+        return render(request,'store/admorders.html',{'data':users,'productForm':pf}) 
 
 def ret(request,id):
 
@@ -1388,6 +1310,7 @@ def cat(re):
     ii=category.objects.all()
     page = re.GET.get('page', 1)
     c=categoryForm()
+    productForm=BannerForm()
 
     paginator = Paginator(ii, 7)
     try:
@@ -1397,7 +1320,7 @@ def cat(re):
     except EmptyPage:
                         users = paginator.page(paginator.num_pages)
 
-    return render(re,"category.html",{'s':users,'category':c}) 
+    return render(re,"category.html",{'s':users,'category':c,'  productForm':  productForm}) 
 
  else:
     return redirect('adm')    
@@ -1405,11 +1328,14 @@ def cat(re):
     
 
 
-class dele(DeleteView):
-     model=produc
-     template_name='delete.html'
-     pk_url_kwarg='pk'
-     success_url= reverse_lazy("admproduct")
+
+
+def productdelete(request,ki):
+  pro_delete=produc.objects.get(id=ki)
+  pro_delete.delete()
+  messages.info(request,"product deleted from inventory")
+  return redirect("admproduct")
+
      
     #  login_url='adm'
     #  redirect_field_name='dele'
@@ -1494,6 +1420,7 @@ def admuser(req):
         if req.method =='POST':
                 s=req.POST['search']
                 if s is None:
+                    productForm=BannerForm()
                     a=customer.objects.all().order_by('id')
                     page = req.GET.get('page', 1)
 
@@ -1504,9 +1431,10 @@ def admuser(req):
                             users = paginator.page(1)
                     except EmptyPage:
                             users = paginator.page(paginator.num_pages)
-                    return render(req,'admuser.html',{'h':users})
+                    return render(req,'admuser.html',{'h':users,'productForm':productForm})
                 else:
                     a=customer.objects.filter(fname__icontains=s).order_by('id')
+                    productForm=BannerForm()
                     page = req.GET.get('page', 1)
 
                     paginator = Paginator(a, 3)
@@ -1518,9 +1446,10 @@ def admuser(req):
                             users = paginator.page(paginator.num_pages)
 
 
-                    return render(req,'admuser.html',{'h':users})
+                    return render(req,'admuser.html',{'h':users,'productForm':productForm})
         else:
                 a=customer.objects.all().order_by('id')
+                productForm=BannerForm()
                 page = req.GET.get('page', 1)
 
                 paginator = Paginator(a, 7)
@@ -1530,7 +1459,7 @@ def admuser(req):
                             users = paginator.page(1)
                 except EmptyPage:
                             users = paginator.page(paginator.num_pages)
-                return render(req,"admuser.html",{'h':users})
+                return render(req,"admuser.html",{'h':users,'productForm':productForm})
   else:
         return redirect('adm')
 

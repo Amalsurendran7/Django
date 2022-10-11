@@ -1,6 +1,7 @@
 {%extends 'admhome.html'%}
 
 {%block content%}
+{%load widget_tweaks%}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <a href="" type="button" class="btn btn-primary" data-toggle="modal" data-target="#catModal">create</a>
 <div class="modal fade" id="catModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel"
@@ -53,10 +54,10 @@ aria-hidden="true">
                   <td> {{i.category_name}}</td>
                   
                   <td> 
-                    <a href="#"  type='button' data-toggle="modal" data-target="#delete" class="btn btn-danger" >delete</a>
+                    <a href="#"  type='button' data-toggle="modal" data-target="#delete{{i.id}}" class="btn btn-danger" >delete</a>
                     <a href="{% url 'cupd' i.pk%}"> <button class="btn btn-warning">update</button></a></td>
 
-                    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete"
+                    <div class="modal fade" id="delete{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="delete"
 aria-hidden="true">
 <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -91,6 +92,56 @@ aria-hidden="true">
                 {% endif %}
                 {% endfor %}
               </table>
+
+              <div class="modal fade" id="bannerModal" tabindex="-1" aria-labelledby="bannerModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="bannerModalLabel">Add Banner</h5>
+                      <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">*</button>
+                    </div>
+                    <form method="post" action="{%url 'ban'%}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="container register-form">
+                         
+                        <div class="row">
+                                <div class="col-9">
+                                  <div class="form-group">
+                                    
+                                    
+                                    <label for="">Banner Image</label>
+                                    {% render_field productForm.image class="form-control" placeholder="Product Name" %}
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="">Short Description</label>
+                                    {% render_field productForm.desc class="form-control"  %}
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="">Banner title</label>
+                                    {% render_field productForm.title class="form-control" placeholder="title" %}
+                                  </div>
+                                  <div class="form-group">
+                                   
+                        <button type="submit" class=" btn btn-primary">ADD</button>
+                                    
+                                  </div>
+                                  
+                                  
+                          </div>
+                        </div>
+                      </div>
+                </form>
+            
+            
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                     
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+
             
      {%if messages%}
         {%for i in messages%}
@@ -108,7 +159,7 @@ aria-hidden="true">
 
 setTimeout(function(){ 
    message_ele.style.display = "none"; 
-}, 3000);
+}, 5000);
     </script>
     
           {% if s.has_other_pages %}

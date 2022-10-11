@@ -3,6 +3,7 @@
 
 {%block content%}
 
+{%load widget_tweaks%}
 
     <a href="" class="btn btn-primary" data-toggle="modal" data-target="#pofferModal">Add product offer</a>
 
@@ -75,15 +76,15 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="cofferModalLabel">category offer</h5>
-              <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">*</button>
+              <button type="button"  class="btn-close" data-dismiss="modal" aria-label="Close">*</button>
             </div>
-    
+    <div class="d-flex justify-content-center">
             <form action="{%url 'coffer'%}" method="post">
               {%csrf_token%}
     
               <div class="form-group">
                 <label for="">categoryname</label>
-                <select name="coffer" id="">
+                <select name="coffer" style="width:400px;" class="form-control"  id="">
                     {%for i in product%}
                     <option value="{{i.cate_id.category_name}}">{{i.cate_id.category_name}}</option>
                     {%endfor%}
@@ -92,23 +93,24 @@
               </div>
               <div class="form-group">
                 <label for="">start date</label>
-                <input type="date"  name="start" placeholder="start" >
+                <input type="date" style="width:400px;"  class="form-control" name="start" placeholder="start" >
                
               </div>
               <div class="form-group">
                 <label for="">End date</label>
-                <input type="date" name="end"placeholder="end"  >
+                <input type="date" style="width:400px;"  class="form-control" name="end"placeholder="end"  >
                
               </div>
               <div class="form-group">
                 <label for="">percentage</label>
-                <input name="per" placeholder="discount" >
+                <input name="per" style="width:400px;"  class="form-control" placeholder="discount" >
                
               </div>
              
               
-              <button type="submit" class="btn btn-primary">Add</button>
+              <button type="submit" style="width:400px;"  class="form-control btn btn-primary" class="btn btn-primary">Add</button>
             </form>
+          </div>
            
            
     
@@ -132,13 +134,13 @@
               <h5 class="modal-title" id="pofferModalLabel">Add offer</h5>
               <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">*</button>
             </div>
-    
+    <div class="d-flex justify-content-center">
             <form action="{%url 'productoffers'%}" method="post">
               {%csrf_token%}
     
               <div class="form-group">
                 <label for="">productname</label>
-                <select name="offer" id="">
+                <select name="offer" style="width:400px;" class="form-control" id="">
                     {%for i in product%}
                     <option value="{{i.name}}">{{i.name}}</option>
                     {%endfor%}
@@ -147,23 +149,24 @@
               </div>
               <div class="form-group">
                 <label for="">start date</label>
-                <input type="date"  name="start" placeholder="start" >
+                <input type="date" style="width:400px;" class="form-control" name="start" placeholder="start" >
                
               </div>
               <div class="form-group">
                 <label for="">End date</label>
-                <input type="date" name="end"placeholder="end"  >
+                <input type="date" style="width:400px;" class="form-control" name="end"placeholder="end"  >
                
               </div>
               <div class="form-group">
                 <label for="">percentage</label>
-                <input name="per" placeholder="discount" >
+                <input name="per" style="width:400px;" class="form-control" placeholder="discount" >
                
               </div>
              
               
-              <button type="submit" class="btn btn-primary">Add</button>
+              <button type="submit" style="width:400px;" class="btn btn-primary form-control">Add</button>
             </form>
+          </div>
            
            
     
@@ -175,9 +178,75 @@
           </div>
         </div>
       </div>
-{%for i in messages%}
-<div class="alert alert_warnig">{{i}}</div>
-{%endfor%}
 
+      <div class="modal fade" id="bannerModal" tabindex="-1" aria-labelledby="bannerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="bannerModalLabel">Add Banner</h5>
+              <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">*</button>
+            </div>
+            <form method="post" action="{%url 'ban'%}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="container register-form">
+                 
+                <div class="row">
+                        <div class="col-9">
+                          <div class="form-group">
+                            
+                            
+                            <label for="">Banner Image</label>
+                            {% render_field productForm.image class="form-control" placeholder="Product Name" %}
+                          </div>
+                          <div class="form-group">
+                            <label for="">Short Description</label>
+                            {% render_field productForm.desc class="form-control"  %}
+                          </div>
+                          <div class="form-group">
+                            <label for="">Banner title</label>
+                            {% render_field productForm.title class="form-control" placeholder="title" %}
+                          </div>
+                          <div class="form-group">
+                           
+                <button type="submit" class=" btn btn-primary">ADD</button>
+                            
+                          </div>
+                          
+                          
+                  </div>
+                </div>
+              </div>
+        </form>
+    
+    
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+      {%if messages%}
+        {%for i in messages%}
+        <div id="message_container" class="alert alert-warning" role="alert">
+        {{i}}
+        
+        </div>
+  
+        {%endfor%}
+        {%endif%}
+        
+
+<script text="javascript">
+   var message_ele = document.getElementById("message_container");
+
+setTimeout(function(){ 
+   message_ele.style.display = "none"; 
+}, 3000);
+    </script>
+    
+      
       {%endblock%}
     

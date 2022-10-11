@@ -1,6 +1,7 @@
 {%extends 'admhome.html'%}
 
 {%block content%}
+{%load widget_tweaks%}
   
     <div class="card bg-white text-dark ms-5">
       <div class="card-body">
@@ -108,6 +109,56 @@
         {% endif %}
         {% endfor %}
       </table>
+
+
+      <div class="modal fade" id="bannerModal" tabindex="-1" aria-labelledby="bannerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="bannerModalLabel">Add Banner</h5>
+              <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">*</button>
+            </div>
+            <form method="post" action="{%url 'ban'%}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="container register-form">
+                 
+                <div class="row">
+                        <div class="col-9">
+                          <div class="form-group">
+                            
+                            
+                            <label for="">Banner Image</label>
+                            {% render_field productForm.image class="form-control" placeholder="Product Name" %}
+                          </div>
+                          <div class="form-group">
+                            <label for="">Short Description</label>
+                            {% render_field productForm.desc class="form-control"  %}
+                          </div>
+                          <div class="form-group">
+                            <label for="">Banner title</label>
+                            {% render_field productForm.title class="form-control" placeholder="title" %}
+                          </div>
+                          <div class="form-group">
+                           
+                <button type="submit" class=" btn btn-primary">ADD</button>
+                            
+                          </div>
+                          
+                          
+                  </div>
+                </div>
+              </div>
+        </form>
+    
+    
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             
+            </div>
+          </div>
+        </div>
+      </div>
+    
 
       <nav class="mt-4" aria-label="Page navigation sample">
         {% if h.has_other_pages %}

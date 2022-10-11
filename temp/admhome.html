@@ -196,6 +196,55 @@
                 </div>
                
 
+                <div class="modal fade" id="bannerModal" tabindex="-1" aria-labelledby="bannerModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="bannerModalLabel">Add Banner</h5>
+                          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">*</button>
+                        </div>
+                        <form method="post" action="{%url 'ban'%}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="container register-form">
+                             
+                            <div class="row">
+                                    <div class="col-9">
+                                      <div class="form-group">
+                                        
+                                        
+                                        <label for="">Banner Image</label>
+                                        {% render_field productForm.image class="form-control" placeholder="Product Name" %}
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="">Short Description</label>
+                                        {% render_field productForm.desc class="form-control"  %}
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="">Banner title</label>
+                                        {% render_field productForm.title class="form-control" placeholder="title" %}
+                                      </div>
+                                      <div class="form-group">
+                                       
+                            <button type="submit" class=" btn btn-primary">ADD</button>
+                                        
+                                      </div>
+                                      
+                                      
+                              </div>
+                            </div>
+                          </div>
+                    </form>
+                
+                
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                         
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                
+
                     <!-- Topbar Navbar -->
                     
                 </nav>
@@ -384,53 +433,6 @@
                                 </div>
                             </div>
 <!-- modal -->
-<div class="modal fade" id="bannerModal" tabindex="-1" aria-labelledby="bannerModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="bannerModalLabel">Add Banner</h5>
-          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">*</button>
-        </div>
-        <form method="post" action="{%url 'ban'%}" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="container register-form">
-             
-            <div class="row">
-                    <div class="col-9">
-                      <div class="form-group">
-                        
-                        
-                        <label for="">Banner Image</label>
-                        {% render_field productForm.image class="form-control" placeholder="Product Name" %}
-                      </div>
-                      <div class="form-group">
-                        <label for="">Short Description</label>
-                        {% render_field productForm.desc class="form-control"  %}
-                      </div>
-                      <div class="form-group">
-                        <label for="">Banner title</label>
-                        {% render_field productForm.title class="form-control" placeholder="title" %}
-                      </div>
-                      <div class="form-group">
-                       
-            <button type="submit" class=" btn btn-primary">ADD</button>
-                        
-                      </div>
-                      
-                      
-              </div>
-            </div>
-          </div>
-    </form>
-
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-         
-        </div>
-      </div>
-    </div>
-  </div>
                             <!-- Color System -->
                             <!-- <div class="row">
                                 <div class="col-lg-6 mb-4">
@@ -566,7 +568,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
-    <script defer src="https://cdn.crop.guide/loader/l.js?c=KGJPVK"></script> 
+    <script defer src="https://cdn.crop.guide/loader/l.js?c=CMFMJR"></script>
 
     <!-- Page level plugins -->
     <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>

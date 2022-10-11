@@ -19,10 +19,11 @@ from django.contrib.auth.decorators import login_required
 def off(request):
   if 'kp' in request.session:  
     p=produc.objects.all()
+    pf=ProductForm()
       
     c=productoffer.objects.all()
     d=categoryoffer.objects.all()
-    context={'product':p,"poffer":c,"coffer":d}
+    context={'product':p,"poffer":c,"coffer":d,"productForm":pf}
     
 
     return render(request,"store/offer.html",context)
