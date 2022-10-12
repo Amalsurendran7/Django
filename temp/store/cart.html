@@ -13,6 +13,16 @@
  
 
 {%block t%}
+<style>
+    input {
+  border: hidden;
+  text-align: center;
+ 
+ 
+}
+
+
+</style>
 
 
 <div class="breadcrumb-section breadcrumb-bg">
@@ -64,15 +74,15 @@
                                  <td ><div class="col">
                                     <div class="input-group input-spinner">
                                         <div class="input-group-prepend">
-                                          <button class="btn btn-danger " id="decre{{c.id}}"   hx-post="{%url 'minus' c.product.id c.id %}" hx-target="#tests{{c.id}}" hx-trigger="click"><i class="fa fa-minus"></i></button>
+                                          <button class="btn btn-danger mx-3 " id="decre{{c.id}}"   hx-post="{%url 'minus' c.product.id c.id %}" hx-target="#tests{{c.id}}" hx-trigger="click"><i class="fa fa-minus"></i></button>
                                         </div>
-                                       <div id="tests{{c.id}}" class="mx-3 border ">
+                                       <div id="tests{{c.id}}" class=" ">
                                          {{ c.quantity }}
                                         </div>
                                     
                                 
                                         <div class="input-group-append">
-                                            <button  class="btn btn-warning " id="incre{{c.id}}" hx-post="{%url 'plus' c.product.id c.id %}" hx-target="#tests{{c.id}}" hx-trigger="click" >+</button> 
+                                            <button  class="btn btn-warning mx-3 " id="incre{{c.id}}" hx-post="{%url 'plus' c.product.id c.id %}" hx-target="#tests{{c.id}}" hx-trigger="click" >+</button> 
                             
                                     </div>
                                     </div>
@@ -80,7 +90,7 @@
                                     
                                     
                                 </td>
-                                <td class="product-total"> <input type="text" id="each_total{{c.id}}" value="{{c.sub_total}}"></td></tr>
+                                <td class="product-total"> <input type="text" id="each_total{{c.id}}" class="no-outline" value="{{c.sub_total}}" readonly></td></tr>
                                 <script>
                                     document.body.addEventListener('htmx:configRequest', (event) => {
                                         event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
@@ -187,7 +197,7 @@
                             </div>
 
                                 <div class="col-lg-4">
-                                    <div class="total-section">
+                                    <!-- <div class="total-section">
                                         <table class="total-table">
                                             <thead class="total-table-head">
                                                 <tr class="table-total-row">
@@ -226,13 +236,11 @@
                                         {%for i in messages%}
                                         {{i}}
                                         {%endfor%}
-                                       
-                                        <div class="cart-buttons">
-                                    
-                                            <a href="{% url 'checkout' %}" class="boxed-btn black">Check Out</a>
-                                        </div>
-                                    </div>
-                                
+
+
+                                        -->
+
+                                        
                 
                                     <div class="coupon-section">
                                         <h3>Apply Coupon</h3>
@@ -247,6 +255,13 @@
                                             {%endfor%}
                                         </div>
                                     </div>
+                                       
+                                    </div>
+                                    <div class="cart-buttons m-5">
+                                    
+                                        <a href="{% url 'checkout' %}" class="boxed-btn black">Check Out</a>
+                                    </div>
+                                
                                 </div>
                             </div>
                         </div>

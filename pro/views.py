@@ -969,7 +969,7 @@ def signup(request):
 def index(request):
     g=produc.objects.all()[:3]
    
-    h=banner.objects.all()
+    h=banner.objects.first()
     context={'pro':g,'ban':h}
     return render(request,"index.html",context)
 
@@ -1126,6 +1126,7 @@ def orderview(request):
 
    
         pf=BannerForm()
+        orderForm=OPForm()
     
         page = request.GET.get('page', 1)
 
@@ -1136,7 +1137,7 @@ def orderview(request):
                             users = paginator.page(1)
         except EmptyPage:
                             users = paginator.page(paginator.num_pages)
-        return render(request,'store/admorders.html',{'data':users,'productForm':pf}) 
+        return render(request,'store/admorders.html',{'data':users,'productForm':pf,'orderForm':orderForm}) 
 
 def ret(request,id):
 
