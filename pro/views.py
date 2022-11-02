@@ -53,8 +53,9 @@ def logi(req):
         a=req.POST.get('username')
         b=req.POST.get('password')
         u=auth.authenticate(username=a,password=b)
+        print(u.is_admin)
         
-        if u is not None:
+        if u is not None and u.is_admin :
             
             print(req.user.is_authenticated)
             req.session['kp']=123
@@ -1092,6 +1093,7 @@ def  otp(re):
             print(a.username)
             print(a.password)
             
+        
             
             
             print('entered')
